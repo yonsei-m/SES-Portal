@@ -1,4 +1,4 @@
-namespace 社員_求人管理アプリ.Constants;
+namespace SES_Portal.Constants;
 
 public static class Prefectures
 {

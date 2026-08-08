@@ -1,4 +1,4 @@
-namespace 社員_求人管理アプリ.Enums;
+namespace SES_Portal.Enums;
 using System.ComponentModel.DataAnnotations;
 public enum HistoryActionType
 {

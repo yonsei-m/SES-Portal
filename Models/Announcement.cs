@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
-using 社員_求人管理アプリ.Enums;
+using SES_Portal.Enums;
 
-namespace 社員_求人管理アプリ.Models;
+namespace SES_Portal.Models;
 
 public class Announcement
 {

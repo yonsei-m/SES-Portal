@@ -1,4 +1,4 @@
-namespace 社員_求人管理アプリ.ViewModels;
+namespace SES_Portal.ViewModels;
 
 public class SharedFileViewModel
 {

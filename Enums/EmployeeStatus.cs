@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace 社員_求人管理アプリ.Enums;
+namespace SES_Portal.Enums;
 
 public enum EmployeeStatus
 {

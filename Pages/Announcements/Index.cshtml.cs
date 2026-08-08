@@ -1,10 +1,10 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc;
-using 社員_求人管理アプリ.Models;
-using 社員_求人管理アプリ.Services;
-using 社員_求人管理アプリ.Enums;
+using SES_Portal.Models;
+using SES_Portal.Services;
+using SES_Portal.Enums;
 
-namespace 社員_求人管理アプリ.Pages.Announcements;
+namespace SES_Portal.Pages.Announcements;
 public class IndexModel : PageModel
 {
     private readonly AnnouncementService _announcementService;

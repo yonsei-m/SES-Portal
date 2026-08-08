@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 
-namespace 社員_求人管理アプリ.Areas.Identity.Pages.Account
+namespace SES_Portal.Areas.Identity.Pages.Account
 {
     public class LogoutModel : PageModel
     {

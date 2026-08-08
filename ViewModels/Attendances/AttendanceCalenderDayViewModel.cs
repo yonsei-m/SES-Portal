@@ -1,5 +1,5 @@
-using 社員_求人管理アプリ.Enums;
-namespace 社員_求人管理アプリ.ViewModels.Attendances;
+using SES_Portal.Enums;
+namespace SES_Portal.ViewModels.Attendances;
 
 public class AttendanceCalendarDayViewModel
 {

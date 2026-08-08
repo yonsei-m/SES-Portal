@@ -1,4 +1,4 @@
-namespace 社員_求人管理アプリ.Helpers;
+namespace SES_Portal.Helpers;
 
 public static class ChatDateHelper
 {

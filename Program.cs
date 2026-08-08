@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
-using 社員_求人管理アプリ.Data;
-using 社員_求人管理アプリ.Services;
-using 社員_求人管理アプリ.Pages.Chat;
+using SES_Portal.Data;
+using SES_Portal.Services;
+using SES_Portal.Pages.Chat;
 
 var builder = WebApplication.CreateBuilder(args);
 

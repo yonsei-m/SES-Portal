@@ -1,4 +1,4 @@
-namespace 社員_求人管理アプリ.ViewModels.Attendances;
+namespace SES_Portal.ViewModels.Attendances;
 
 public class AttendanceHistoryItemViewModel
 {

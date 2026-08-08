@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
-using 社員_求人管理アプリ.Data;
-namespace 社員_求人管理アプリ.Services;
+using SES_Portal.Data;
+namespace SES_Portal.Services;
 public class SidebarService
 {
     private readonly AppDbContext _context;

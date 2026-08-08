@@ -2,10 +2,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using 社員_求人管理アプリ.Services;
-using 社員_求人管理アプリ.ViewModels;
+using SES_Portal.Services;
+using SES_Portal.ViewModels;
 
-namespace 社員_求人管理アプリ.Pages.MyPage;
+namespace SES_Portal.Pages.MyPage;
 
 
 [Authorize]

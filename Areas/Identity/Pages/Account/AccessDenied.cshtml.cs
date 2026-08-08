@@ -4,7 +4,7 @@
 
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace 社員_求人管理アプリ.Areas.Identity.Pages.Account
+namespace SES_Portal.Areas.Identity.Pages.Account
 {
     /// <summary>
     ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used

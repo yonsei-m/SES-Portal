@@ -1,10 +1,10 @@
 using Microsoft.EntityFrameworkCore;
-using 社員_求人管理アプリ.Data;
-using 社員_求人管理アプリ.Models;
-using 社員_求人管理アプリ.Enums;
-using 社員_求人管理アプリ.ViewModels.Attendances;
+using SES_Portal.Data;
+using SES_Portal.Models;
+using SES_Portal.Enums;
+using SES_Portal.ViewModels.Attendances;
 
-namespace 社員_求人管理アプリ.Services;
+namespace SES_Portal.Services;
 public class AttendanceService
 {
     private readonly AppDbContext _context;

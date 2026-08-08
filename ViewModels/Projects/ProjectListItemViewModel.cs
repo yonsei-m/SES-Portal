@@ -1,4 +1,4 @@
-namespace 社員_求人管理アプリ.ViewModels.Projects;
+namespace SES_Portal.ViewModels.Projects;
 
 public class ProjectListItemViewModel
 {

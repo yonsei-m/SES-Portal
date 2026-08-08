@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 
-namespace 社員_求人管理アプリ.Extensions;
+namespace SES_Portal.Extensions;
 
 public static class EnumExtensions
 {

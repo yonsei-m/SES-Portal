@@ -1,10 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Authorization;
-using 社員_求人管理アプリ.Services;
-using 社員_求人管理アプリ.ViewModels;
-using 社員_求人管理アプリ.Models;
-namespace 社員_求人管理アプリ.Pages;
+using SES_Portal.Services;
+using SES_Portal.ViewModels;
+using SES_Portal.Models;
+namespace SES_Portal.Pages;
 
 
 [Authorize]public class IndexModel : PageModel

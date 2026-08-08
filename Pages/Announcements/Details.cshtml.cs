@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using 社員_求人管理アプリ.Models;
-using 社員_求人管理アプリ.Services;
+using SES_Portal.Models;
+using SES_Portal.Services;
 
-namespace 社員_求人管理アプリ.Pages.Announcements;
+namespace SES_Portal.Pages.Announcements;
 
 public class DetailsModel : PageModel
 {

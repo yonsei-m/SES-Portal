@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using 社員_求人管理アプリ.Services;
+using SES_Portal.Services;
 
-namespace 社員_求人管理アプリ.Pages.Projects;
+namespace SES_Portal.Pages.Projects;
 public class DetailsModel : PageModel
 {
     private readonly ProjectService _projectService;

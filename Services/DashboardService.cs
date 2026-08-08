@@ -1,11 +1,11 @@
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
-using 社員_求人管理アプリ.ViewModels;
-using 社員_求人管理アプリ.Data;
-using 社員_求人管理アプリ.Models;
+using SES_Portal.ViewModels;
+using SES_Portal.Data;
+using SES_Portal.Models;
 
-namespace 社員_求人管理アプリ.Services;
+namespace SES_Portal.Services;
 
 public class DashboardService
 {

@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using 社員_求人管理アプリ.Models;
+using SES_Portal.Models;
 
-namespace 社員_求人管理アプリ.Data;
+namespace SES_Portal.Data;
 
 public class AppDbContext : IdentityDbContext
 

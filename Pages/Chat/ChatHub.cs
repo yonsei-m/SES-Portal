@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.SignalR;
 
-namespace 社員_求人管理アプリ.Pages.Chat;
+namespace SES_Portal.Pages.Chat;
 
 public class ChatHub : Hub
 {

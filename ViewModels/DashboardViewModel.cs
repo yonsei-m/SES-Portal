@@ -1,6 +1,6 @@
-using 社員_求人管理アプリ.Models;
+using SES_Portal.Models;
 
-namespace 社員_求人管理アプリ.ViewModels;
+namespace SES_Portal.ViewModels;
 
 public class DashboardViewModel
 {

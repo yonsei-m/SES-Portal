@@ -1,9 +1,9 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
-using 社員_求人管理アプリ.Models;
+using SES_Portal.Models;
 
-namespace 社員_求人管理アプリ.Services;
+namespace SES_Portal.Services;
 public class CurrentUserService
 {
     private readonly EmployeeService _employeeService;

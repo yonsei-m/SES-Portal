@@ -1,5 +1,5 @@
-using 社員_求人管理アプリ.Models;
-using 社員_求人管理アプリ.Enums;
+using SES_Portal.Models;
+using SES_Portal.Enums;
 
 public class Employee
 {

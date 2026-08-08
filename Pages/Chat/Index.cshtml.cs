@@ -2,11 +2,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SignalR;
-using 社員_求人管理アプリ.Models;
-using 社員_求人管理アプリ.Services;
-using 社員_求人管理アプリ.ViewModels;
+using SES_Portal.Models;
+using SES_Portal.Services;
+using SES_Portal.ViewModels;
 
-namespace 社員_求人管理アプリ.Pages.Chat;
+namespace SES_Portal.Pages.Chat;
 
 public class IndexModel : PageModel
 {

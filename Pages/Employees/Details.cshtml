@@ -1,5 +1,5 @@
 @page
-@model 社員_求人管理アプリ.Pages.Employees.DetailsModel
+@model SES_Portal.Pages.Employees.DetailsModel
 
 <div class="employee-page employee-detail-page">
     <section class="employee-header">
@@ -81,20 +81,20 @@
                                 <span class="detail-value">
                                     @switch(Model.Employee.Status)
                                     {
-                                        case 社員_求人管理アプリ.Enums.EmployeeStatus.Working:
+                                        case SES_Portal.Enums.EmployeeStatus.Working:
                                             <span class="status-badge working">稼働中</span>
                                             break;
-                                        case 社員_求人管理アプリ.Enums.EmployeeStatus.Waiting:
+                                        case SES_Portal.Enums.EmployeeStatus.Waiting:
                                             <span class="status-badge waiting">待機中</span>
                                             break;
 
-                                        case 社員_求人管理アプリ.Enums.EmployeeStatus.Leave:
+                                        case SES_Portal.Enums.EmployeeStatus.Leave:
                                             <span class="status-badge leave">
                                                 休職中
                                             </span>
                                             break;
 
-                                        case 社員_求人管理アプリ.Enums.EmployeeStatus.Retired:
+                                        case SES_Portal.Enums.EmployeeStatus.Retired:
                                             <span class="status-badge retired">
                                                 退職済
                                             </span>

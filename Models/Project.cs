@@ -1,4 +1,4 @@
-using 社員_求人管理アプリ.Models;
+using SES_Portal.Models;
 
 public class Project
 {

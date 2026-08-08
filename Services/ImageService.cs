@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Http;
 
-namespace 社員_求人管理アプリ.Services;
+namespace SES_Portal.Services;
 
 public class ImageService
 {

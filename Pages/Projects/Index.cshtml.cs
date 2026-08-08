@@ -1,10 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using 社員_求人管理アプリ.Data;
-using 社員_求人管理アプリ.Services;
-using 社員_求人管理アプリ.ViewModels.Projects;
+using SES_Portal.Data;
+using SES_Portal.Services;
+using SES_Portal.ViewModels.Projects;
 
-namespace 社員_求人管理アプリ.Pages.Projects;
+namespace SES_Portal.Pages.Projects;
 
 public class IndexModel : PageModel
 {

@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 
-namespace 社員_求人管理アプリ.Data;
+namespace SES_Portal.Data;
 
 public static class IdentitySeeder
 {

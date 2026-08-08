@@ -2,9 +2,9 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using 社員_求人管理アプリ.Data;
+using SES_Portal.Data;
 
-namespace 社員_求人管理アプリ.Services;
+namespace SES_Portal.Services;
 public class CustomClaimsPrincipalFactory : UserClaimsPrincipalFactory<IdentityUser, IdentityRole>
 {
     private readonly AppDbContext _context;

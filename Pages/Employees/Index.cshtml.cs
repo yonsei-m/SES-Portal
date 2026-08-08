@@ -1,11 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using 社員_求人管理アプリ.Enums;
-using 社員_求人管理アプリ.Models;
-using 社員_求人管理アプリ.Services;
+using SES_Portal.Enums;
+using SES_Portal.Models;
+using SES_Portal.Services;
 
-namespace 社員_求人管理アプリ.Pages.Employees;
+namespace SES_Portal.Pages.Employees;
 
 public class IndexModel : PageModel
 {

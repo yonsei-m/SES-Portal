@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace 社員_求人管理アプリ.Models;
+namespace SES_Portal.Models;
 
 public class EmployeeSkill
 {

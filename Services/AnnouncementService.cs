@@ -1,9 +1,9 @@
 using Microsoft.EntityFrameworkCore;
-using 社員_求人管理アプリ.Data;
-using 社員_求人管理アプリ.Models;
-using 社員_求人管理アプリ.Enums;
+using SES_Portal.Data;
+using SES_Portal.Models;
+using SES_Portal.Enums;
 
-namespace 社員_求人管理アプリ.Services;
+namespace SES_Portal.Services;
 
 public class AnnouncementService
 {
