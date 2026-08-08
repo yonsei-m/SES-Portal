@@ -1,0 +1,195 @@
+@page
+@model 社員_求人管理アプリ.Pages.MyPage.IndexModel
+<div class="mypage-page">
+    <h2>マイページ</h2>
+
+    <div class="mypage-grid">
+
+        <!-- プロフィール -->
+        <section class="profile-card">
+            <h3 class="mypage-card-title">プロフィール</h3>
+            <div class="profile-content">
+
+                @if (!string.IsNullOrEmpty(Model.MyPage.Employee.ImagePath))
+                {
+                    <img src="@Model.MyPage.Employee.ImagePath" class="profile-image" />
+                }
+                else
+                {
+                    <img src="/images/noimage.png" class="profile-image" />
+                }
+
+                <h4 class="profile-name">@Model.MyPage.Employee.Name</h4>
+                <div class="info-content">
+                    <div class="info-item">
+                        <div class="info-label">社員番号</div>
+                        <div class="info-value">
+                            @Model.MyPage.Employee.EmployeeNumber
+                        </div>
+                    </div>
+
+                    <div class="info-item">
+                        <div class="info-label">部署</div>
+                        <div class="info-value">
+                            @Model.MyPage.Employee.Department?.Name
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">入社日</div>
+                        <div class="info-value">
+                            @Model.MyPage.Employee.HireDate.ToString("yyyy/MM/dd")
+                        </div>
+                    </div>
+                    <div class="info-item-mail">
+                        <div class="info-label">メールアドレス</div>
+                        <div class="info-value">
+                            @Model.MyPage.Employee.Email
+                        </div>
+                    </div>
+
+
+                </div>
+                <a asp-page="/Employees/Details" asp-route-id="@Model.MyPage.Employee.Id" class="btn btn-primary profile-edit-btn">
+                    <i class="bi bi-pencil-square"></i>
+                    プロフィール編集
+                </a>
+            </div>
+        </section>
+
+        <div class="center-column">
+            <!-- スキル -->
+            <section class="skill-card">
+                <h3 class="mypage-card-title">スキル</h3>
+                <div class="skill-tags">
+                    @if (Model.MyPage.Employee.EmployeeSkills.Any())
+                    {
+                        foreach (var employeeSkill in Model.MyPage.Employee.EmployeeSkills)
+                        {
+                            <span class="skill-tag">
+                                @employeeSkill.Skill.Name
+                            </span>
+                        }
+                    }
+                    else
+                    {
+                        <span class="text-muted">登録されていません</span>
+                    }
+                </div>
+            </section>
+
+            <section class="favorite-card">
+                <div class="card-header-row">
+                    <h3 class="mypage-card-title">お気に入り案件</h3>
+                </div>
+
+                @if (Model.MyPage.FavoriteProjects.Any())
+                {
+                @foreach (var favorite in Model.MyPage.FavoriteProjects
+                        .OrderByDescending(x => x.CreatedAt)
+                        .Take(3))
+                    {
+                        <a asp-page="/Projects/Details"
+                        asp-route-id="@favorite.ProjectId"
+                        class="favorite-item">
+                            <div class="favorite-info">
+                                <div class="favorite-header">
+                                    <div class="favorite-title">
+                                        @favorite.Project.Title
+                                    </div>
+                                    <div class="favorite-date">
+                                        @favorite.CreatedAt.ToString("yyyy/MM/dd")
+                                    </div>
+                                </div>
+                            </div>
+                            <i class="bi bi-chevron-right favorite-arrow"></i>
+                        </a>
+                    }   
+                }
+                else
+                {
+                    <p class="text-muted mb-0">
+                        お気に入り登録された案件はありません。
+                    </p>
+                }
+                <div class="favorite-footer">
+                    @if (Model.MyPage.FavoriteProjects.Count > 3)
+                    {
+                        <span class="favorite-more-text">
+                            他@(Model.MyPage.FavoriteProjects.Count - 3)件のお気に入りがあります
+                        </span>
+                    }
+                    else
+                    {
+                        <span></span>
+                    }
+
+                    <a asp-page="/Projects/Index"
+                    asp-route-OnlyFavorite="true"
+                    class="card-link">
+                        一覧へ
+                        <i class="bi bi-arrow-right"></i>
+                    </a>
+                </div>
+            </section>
+        </div>
+
+        <!-- 勤務状況 -->
+        <div class="right-column">
+            <!-- 本日の勤務状況 -->
+            <section class="attendance-card">
+                <div class="card-header-row">
+                    <h3 class="mypage-card-title">本日の勤務状況</h3>
+                    <a asp-page="/Attendances/Index"
+                    class="card-link">
+                        勤怠一覧へ
+                        <i class="bi bi-arrow-right"></i>
+                    </a>
+                </div>
+                <div class="attendance-row">
+                    <span class="attendance-label">勤務開始</span>
+                    <span class="attendance-value">
+                        @(Model.MyPage.TodayAttendance?.ClockIn?.ToString("HH:mm") ?? "--")
+                    </span>
+                </div>
+
+                <div class="attendance-row">
+                    <span class="attendance-label">勤務終了</span>
+                    <span class="attendance-value">
+                        @(Model.MyPage.TodayAttendance?.ClockOut?.ToString("HH:mm") ?? "--")
+                    </span>
+                </div>
+
+                <div class="attendance-row">
+                    <span class="attendance-label">勤務時間</span>
+                    <span class="attendance-value">
+                        @(Model.MyPage.WorkingHours?.ToString(@"hh\:mm") ?? "--")
+                    </span>
+                </div>
+                @if (Model.MyPage.TodayAttendance == null)
+                {
+                    <form method="post" asp-page-handler="ClockIn">
+                        <button class="btn btn-success w-100">
+                            <i class="bi bi-play-fill"></i>
+                            勤務開始
+                        </button>
+                    </form>
+                }
+                else if (Model.MyPage.TodayAttendance.ClockOut == null)
+                {
+                    <form method="post" asp-page-handler="ClockOut">
+                        <button class="btn btn-danger w-100">
+                            <i class="bi bi-stop-fill"></i>
+                            勤務終了
+                        </button>
+                    </form>
+                }
+                else
+                {
+                    <button class="btn btn-secondary w-100" disabled>
+                        本日の勤務は終了しました
+                    </button>
+                }
+            </section>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,245 @@
+@page
+@model 社員_求人管理アプリ.Pages.Employees.IndexModel
+@using 社員_求人管理アプリ.Enums
+@using 社員_求人管理アプリ.Extensions
+
+<div class="employee-page">
+    <!-- ヘッダー -->
+    <div class="employee-header">
+        <div class="employee-header-left">
+            <nav class="breadcrumb-nav">
+                <a asp-page="/Index" class="breadcrumb-link">
+                    <i class="bi bi-house-fill"></i>
+                    <span>ホーム</span>
+                </a>
+                <i class="bi bi-chevron-right"></i>
+                <span>社員一覧</span>
+            </nav>
+            <h1>社員一覧</h1>
+        </div>
+        <!-- 検索カード -->
+        <div class="search-card">
+            <form method="get">
+                <div class="search-row">
+                    <div class="keyword-filter">
+                        <input type="text"
+                            name="searchName"
+                            value="@Model.SearchName"
+                            class="form-control"
+                            placeholder="キーワード検索：氏名・メールなど">
+                    </div>
+
+                    <div class="department-filter">
+                        <select name="searchDepartmentId" class="form-select">
+                            <option value="">部署</option>
+                            @foreach (var d in Model.Departments)
+                            {
+                                <option value="@d.Id" selected="@(Model.SearchDepartmentId == d.Id)">
+                                    @d.Name
+                                </option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="status-filter">
+                        <select name="SearchStatus" class="form-select">
+                            <option value="">稼働状態</option>
+                            <option value="1" selected="@(Model.SearchStatus == EmployeeStatus.Working)">稼働中</option>
+                            <option value="2" selected="@(Model.SearchStatus == EmployeeStatus.Waiting)">待機中</option>
+                            <option value="3" selected="@(Model.SearchStatus == EmployeeStatus.Leave)">休職中</option>
+                            <option value="4" selected="@(Model.SearchStatus == EmployeeStatus.Retired)">退職済</option>
+                        </select>
+                    </div>
+
+                    <div class="skill-filter skill-dropdown">
+                        <button type="button"
+                                class="form-select skill-select"
+                                data-bs-toggle="dropdown"
+                                data-bs-auto-close="outside"
+                                aria-expanded="false">
+                            スキル
+                        </button>
+
+                        <div class="dropdown-menu skill-menu">
+
+                            @foreach (var skill in Model.AllSkills)
+                            {
+                                <label class="dropdown-item skill-item">
+                                    <input class="form-check-input"
+                                        type="checkbox"
+                                        name="SearchSkillIds"
+                                        value="@skill.Id"
+                                        @(Model.SearchSkillIds.Contains(skill.Id) ? "checked" : "") />
+                                        @skill.Name
+                                </label>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="search-actions">
+                        <button class="btn btn-primary">
+                            <i class="bi bi-search"></i>
+                            検索
+                        </button>
+
+                        <button type="button"
+                                id="resetSearch"
+                                class="btn btn-outline-secondary">
+                            クリア
+                        </button>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+
+    <section class="employee-list-card">
+
+        <div class="employee-card-grid">
+            @foreach (var item in Model.Employees)
+            {
+                <div class="employee-card"
+                     role="button"
+                     tabindex="0"
+                     data-url="@Url.Page("/Employees/Details", new { id = item.Id })"
+                     onclick="window.location.href = this.getAttribute('data-url');"
+                     onkeydown="if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); window.location.href = this.getAttribute('data-url'); }">
+                    <div class="employee-card-top">
+                        @if (!string.IsNullOrWhiteSpace(item.ImagePath))
+                        {
+                            <img src="@item.ImagePath" class="card-avatar" alt="@item.Name" />
+                        }
+                        else
+                        {
+                            <div class="card-avatar card-avatar-placeholder">
+                                <i class="bi bi-person-circle"></i>
+                            </div>                            
+                        }
+                        <div class="employee-card-info">
+                            <div class="employee-card-name">@item.Name</div>
+                            <div class="employee-no">@item.EmployeeNumber</div>
+                        </div>
+                    </div>
+
+                    <div class="employee-card-meta">
+                        <span class="department-badge">@item.Department.Name</span>
+                        <span class="status-badge @item.Status.ToString().ToLower()">
+                            @item.Status.GetDisplayName()
+                        </span>
+                        @if (!string.IsNullOrEmpty(item.UserId))
+                        {
+                            <a asp-page="/Chat/Index"
+                            asp-route-id="@item.Id"
+                            class="btn btn-chat"
+                            onclick="event.stopPropagation();">
+                                <i class="bi bi-chat-dots"></i>
+                            </a>
+                        }
+                    </div>
+                    <div class="employee-skill">
+                        <div class="label">スキル</div>
+                        <div class="skill-text">
+                            @if(item.EmployeeSkills != null &&
+                                item.EmployeeSkills.Any())
+                            {
+                                foreach(var skill in item.EmployeeSkills)
+                                {
+                                    <span class="skill-tag">
+                                        @skill.Skill.Name
+                                    </span>
+                                }
+                            }
+                            else
+                            {
+                                <span class="text-muted">
+                                    未登録
+                                </span>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <div class="pagination-area">
+            <div class="page-info">
+                @{
+                    var start = (Model.PageNumber - 1) * Model.PageSize + 1;
+                    var end = Math.Min(Model.PageNumber * Model.PageSize, Model.TotalCount);
+                }
+
+                @start ～ @end 件 / 全 @Model.TotalCount 件
+            </div>
+
+            <nav>
+                <ul class="pagination mb-0">
+                    <li class="page-item @(Model.PageNumber == 1 ? "disabled" : "")">
+                        <a class="page-link"
+                           asp-page="./Index"
+                           asp-route-pageNumber="1"
+                           asp-route-searchName="@Model.SearchName"
+                           asp-route-searchDepartmentId="@Model.SearchDepartmentId"
+                           asp-route-searchStatus="@Model.SearchStatus"
+                           asp-route-searchSkill="@Model.SearchSkill">
+                            <i class="bi bi-chevron-double-left"></i>
+                        </a>
+                    </li>
+
+                    <li class="page-item @(Model.PageNumber == 1 ? "disabled" : "")">
+                        <a class="page-link"
+                           asp-page="./Index"
+                           asp-route-pageNumber="@(Model.PageNumber-1)"
+                           asp-route-searchName="@Model.SearchName"
+                           asp-route-searchDepartmentId="@Model.SearchDepartmentId"
+                           asp-route-searchStatus="@Model.SearchStatus"
+                           asp-route-searchSkill="@Model.SearchSkill">
+                            <i class="bi bi-chevron-left"></i>
+                        </a>
+                    </li>
+
+                    @for (int i = 1; i <= Model.TotalPages; i++)
+                    {
+                        <li class="page-item @(i == Model.PageNumber ? "active" : "")">
+                            <a class="page-link"
+                               asp-page="./Index"
+                               asp-route-pageNumber="@i"
+                               asp-route-searchName="@Model.SearchName"
+                               asp-route-searchDepartmentId="@Model.SearchDepartmentId"
+                               asp-route-searchStatus="@Model.SearchStatus"
+                               asp-route-searchSkill="@Model.SearchSkill">
+                                @i
+                            </a>
+                        </li>
+                    }
+
+                    <li class="page-item @(Model.PageNumber == Model.TotalPages ? "disabled" : "")">
+                        <a class="page-link"
+                           asp-page="./Index"
+                           asp-route-pageNumber="@(Model.PageNumber+1)"
+                           asp-route-searchName="@Model.SearchName"
+                           asp-route-searchDepartmentId="@Model.SearchDepartmentId"
+                           asp-route-searchStatus="@Model.SearchStatus"
+                           asp-route-searchSkill="@Model.SearchSkill">
+                            <i class="bi bi-chevron-right"></i>
+                        </a>
+                    </li>
+
+                    <li class="page-item @(Model.PageNumber == Model.TotalPages ? "disabled" : "")">
+                        <a class="page-link"
+                           asp-page="./Index"
+                           asp-route-pageNumber="@Model.TotalPages"
+                           asp-route-searchName="@Model.SearchName"
+                           asp-route-searchDepartmentId="@Model.SearchDepartmentId"
+                           asp-route-searchStatus="@Model.SearchStatus"
+                           asp-route-searchSkill="@Model.SearchSkill">
+                            <i class="bi bi-chevron-double-right"></i>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </section>
+</div>

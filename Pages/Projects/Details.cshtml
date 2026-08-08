@@ -1,0 +1,132 @@
+@page "{id:int}"
+@using 社員_求人管理アプリ.Models;
+@model 社員_求人管理アプリ.Pages.Projects.DetailsModel
+<div class="project-page">
+    <section class="project-header">
+        <div class="project-header-left">
+            <nav class="breadcrumb-nav">
+                <a asp-page="/Index" class="breadcrumb-link">
+                    <i class="bi bi-house-fill"></i>
+                    <span>ホーム</span>
+                </a>
+                <a asp-page="/Projects/Index" class="breadcrumb-link">
+                    <i class="bi bi-chevron-right mx-2"></i>
+                    <span>プロジェクト一覧</span>
+                </a>
+                <i class="bi bi-chevron-right mx-2"></i>
+                <span>プロジェクト詳細</span>
+            </nav>
+            <div class="project-title-row">
+                <h1 class="project-title">
+                    @Model.Project.Title
+                </h1>
+
+                <form method="post" asp-page-handler="Favorite" asp-route-id="@Model.Project.Id" class="favorite-form">
+                    @if (Model.IsFavorite)
+                    {
+                        <button type="submit" class="favorite-star active" title="お気に入り解除">
+                            ★
+                        </button>
+                    }
+                    else
+                    {
+                        <button type="submit" class="favorite-star" title="お気に入り登録">
+                            ☆
+                        </button>
+                    }
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <div class="project-detail-grid">
+
+        <!-- 基本情報 -->
+        <div class="project-detail-card project-info-card">
+
+            <div class="card-title">
+                <span class="title-icon">📌</span>
+                <h5>基本情報</h5>
+            </div>
+
+            <div class="info-list">
+                <div class="project-info-row">
+                    <span>プロジェクトID</span>
+                    <strong>@Model.Project.ProjectCode</strong>
+                </div>
+
+                <div class="project-info-row">
+                    <span>部署</span>
+                    <strong>@Model.Project.Department.Name</strong>
+                </div>
+
+                <div class="project-info-row">
+                    <span>勤務地</span>
+                    <strong>@Model.Project.Location</strong>
+                </div>
+
+                <div class="project-info-row">
+                    <span>単価</span>
+                    <strong class="price">
+                        @Model.Project.PriceRange
+                    </strong>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- 概要 -->
+        <div class="project-detail-card">
+            <div class="card-title">
+                <span class="title-icon">📄</span>
+                <h5>プロジェクト概要</h5>
+            </div>
+
+            <p class="project-description">
+                @Model.Project.Description
+            </p>
+            <div class="skill-section">
+                <h6>
+                    必要スキル・環境
+                </h6>
+                <div class="skill-list">
+                    @foreach(var skill in Model.SkillList)
+                    {
+                        <span class="skill-tag">
+                            @skill
+                        </span>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="bottom-grid">
+        <div class="project-detail-card">
+            <h5>担当メンバー</h5>
+            <div class="member-list">
+                @foreach(var member in Model.Members)
+                {
+                    <div class="member">
+                        @if(!string.IsNullOrEmpty(member.ImagePath))
+                        {
+                            <img src="@member.ImagePath" />
+                        }
+                        else
+                        {
+                            <i class="bi bi-person-circle avatar"></i>
+                        }
+                        <div class="member-info">
+                            <div class="member-name">
+                                @member.Name
+                            </div>
+                            <small>
+                                @member.Department.Name
+                            </small>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

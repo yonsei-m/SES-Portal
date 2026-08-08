@@ -1,0 +1,141 @@
+﻿@using 社員_求人管理アプリ.Services
+@using System.Security.Claims
+@inject SidebarService SidebarService
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - 社員_求人管理アプリ</title>
+    <script type="importmap"></script>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/社員_求人管理アプリ.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/dashboard.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/employee.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/project.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/announcement.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="~/css/chat.css" />
+    <link rel="stylesheet" href="~/css/attendance.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/mypage.css" asp-append-version="true" />
+    <script>
+        if (localStorage.getItem("sidebar") === "closed") {
+            document.documentElement.classList.add("sidebar-collapsed");
+        }
+    </script>
+</head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/8.0.7/signalr.min.js"></script>
+
+@{
+    var path = Context.Request.Path.Value ?? "";
+    var hideSidebar = path.StartsWith("/Identity");
+
+    var unreadChatCount = 0;
+    var unreadAnnouncementCount = 0;
+
+    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+    if (!string.IsNullOrEmpty(userId))
+    {
+        unreadChatCount = await SidebarService.GetUnreadChatCountAsync(userId);
+        unreadAnnouncementCount = await SidebarService.GetUnreadAnnouncementCountAsync(userId);
+    }
+}
+<body>
+    <div class="app-layout">
+
+    <!-- 左固定サイドバー -->
+    @if (!hideSidebar)
+    {
+        <aside id="sidebar" class="sidebar">
+            <div class="sidebar-logo">
+                <button id="sidebarToggle" class="sidebar-toggle">
+                    <i class="bi bi-list"></i>
+                </button>
+            </div>
+            <nav class="sidebar-menu">
+                <a asp-page="/Index">
+                <span class="sidebar-icon-wrapper">
+                    <i class="bi bi-speedometer2"></i></span>
+                    <span class="sidebar-text">ダッシュボード</span>
+                </a>
+                <a asp-page="/Employees/Index">
+                <span class="sidebar-icon-wrapper">
+                    <i class="bi bi-people"></i></span>
+                    <span class="sidebar-text">社員一覧</span>
+                </a>
+                <a asp-page="/Projects/Index">
+                <span class="sidebar-icon-wrapper">
+                    <i class="bi bi-kanban"></i></span>
+                    <span class="sidebar-text">プロジェクト一覧</span>
+                </a>
+                <a asp-page="/Projects/Index" asp-route-OnlyFavorite="true" class="nav-link">
+                   <span class="sidebar-icon-wrapper"> <i class="bi bi-star"></i></span>
+                    <span class="sidebar-text">お気に入り</span>
+                </a>
+                <a asp-page="/Attendances/Index">
+                  <span class="sidebar-icon-wrapper">  <i class="bi bi-clock"></i></span>
+                    <span class="sidebar-text">勤怠管理</span>
+                </a>
+                <a asp-page="/Announcements/Index"">
+                    <span class="sidebar-icon-wrapper">
+                        <i class="bi bi-megaphone"></i>
+
+                        @if (unreadAnnouncementCount > 0)
+                        {
+                            <span class="sidebar-badge">
+                                @unreadAnnouncementCount
+                            </span>
+                        }
+                    </span>
+
+                    <span class="sidebar-text">お知らせ</span>
+                </a>
+                <a asp-page="/Chat/Index">
+                    <span class="sidebar-icon-wrapper">
+                        <i class="bi bi-chat"></i>
+
+                        @if (unreadChatCount > 0)
+                        {
+                            <span class="sidebar-badge">
+                                @(unreadChatCount > 99 ? "99+" : unreadChatCount)
+                            </span>
+                        }
+                    </span>
+
+                        <span class="sidebar-text">
+                        チャット
+                    </span>
+                </a>
+                <a asp-page="/MyPage/Index">
+                <span class="sidebar-icon-wrapper">
+                    <i class="bi bi-person-circle"></i></span>
+                    <span class="sidebar-text">マイページ</span>
+                </a>
+                @if (User.IsInRole("Admin"))
+                {
+                    <div class="sidebar-section-title">
+                        管理者メニューへ
+                    </div>
+                }
+            </nav>
+            <div class="sidebar-bottom">
+                <partial name="_LoginPartial" />
+            </div>
+
+        </aside>
+    }
+    <main id="mainContent" role="main" class="@(hideSidebar ? "main-content full-width" : "main-content")">
+        @RenderBody()
+    </main>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version = "true"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

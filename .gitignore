@@ -1,0 +1,28 @@
+# Build
+bin/
+obj/
+
+# Visual Studio Code
+.vscode/
+
+# User-specific files
+*.user
+*.suo
+
+# ASP.NET Core
+appsettings.Development.json
+
+# SQLite database
+*.db
+*.db-shm
+*.db-wal
+
+# Logs
+*.log
+
+# Uploaded files
+wwwroot/uploads/
+
+# OS
+.DS_Store
+Thumbs.db

@@ -1,0 +1,291 @@
+@page
+@model 社員_求人管理アプリ.Pages.Projects.IndexModel
+
+<div class="project-page">
+    <div class="project-header">
+        <div class="project-header-left">
+            <nav class="breadcrumb-nav">
+                <a asp-page="/Index" class="breadcrumb-link">
+                    <i class="bi bi-house-fill"></i>
+                    <span>ホーム</span>
+                </a>
+                <i class="bi bi-chevron-right"></i>
+                <span>プロジェクト一覧</span>
+            </nav>
+            <h1>プロジェクト一覧</h1>
+        </div>
+        <!-- 検索カード -->
+        <div class="search-card">
+            <form method="get">
+                <div class="search-row">
+                    <div class="search-title">
+                        <input type="text" name="SearchTitle" value="@Model.SearchTitle" class="form-control" placeholder="タイトルで検索" />
+                    </div>
+                    <div class="search-prefecture">
+                        <select name="SearchPrefecture" class="form-select">
+                            <option value="">
+                                都道府県
+                            </option>
+
+                            @foreach (var prefecture in Model.PrefectureList)
+                            {
+                                <option value="@prefecture"
+                                        selected="@(Model.SearchPrefecture == prefecture)">
+                                    @prefecture
+                                </option>
+                            }
+                        </select>
+                    </div>
+                    <div class="search-status">
+                        <select name="SearchStatus" class="form-select">
+
+                            <option value="">
+                                状態
+                            </option>
+
+                            <option value="Open" selected="@(Model.SearchStatus == "Open")">
+                                公開中
+                            </option>
+
+                            <option value="Closed" selected="@(Model.SearchStatus == "Closed")">
+                                停止中
+                            </option>
+
+                        </select>
+                    </div>
+
+                    <div class="search-buttons">
+                        <button class="btn btn-primary">
+                            <i class="bi bi-search"></i>
+                            検索
+                        </button>
+                        <a asp-page="./Index" class="btn btn-outline-secondary">
+                            クリア
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="project-layout">
+        <div class="project--summary">
+            <div class="card summary-card">
+                <div class="summary-header">
+                    <h5>
+                        <i class="bi bi-bar-chart-fill"></i>
+                        サマリー
+                    </h5>
+                </div>
+
+                <div class="summary-body">
+                    <a asp-page="./Index" class="summary-box total text-decoration-none">
+                        <div class="summary-label">
+                            総案件数
+                        </div>
+
+                        <div class="summary-value">
+                            @Model.ViewModel.Summary.TotalCount
+                            <small>件</small>
+                        </div>
+                    </a>
+
+                    <a asp-page="./Index"
+                        asp-route-SearchStatus="Open"
+                        class="summary-box open text-decoration-none">
+                        <div class="summary-label">
+                            公開中
+                        </div>
+
+                        <div class="summary-value">
+                            @Model.ViewModel.Summary.OpenCount
+                            <small>件</small>
+                        </div>
+                    </a>
+
+                    <a asp-page="./Index"
+                        asp-route-OnlyFavorite="true"
+                        class="summary-box favorite text-decoration-none">
+                        <div class="summary-label">
+                            お気に入り
+                        </div>
+
+                        <div class="summary-value">
+                            @Model.ViewModel.Summary.FavoriteCount
+                            <small>件</small>
+                        </div>
+                    </a>
+
+                </div>
+            </div>
+       </div>
+
+        <div class="project-content">
+            <div class="project-table">
+                <div class="project-table-header">
+                    <div>状態</div>
+                    <div>タイトル</div>
+                    <div>勤務地</div>
+                    <div>単価</div>
+                    <div>★</div>
+                </div>
+                <div class="project-list">
+                    @foreach (var item in Model.ViewModel.Projects)
+                    {
+                        <div class="project-row"
+                            role="button"
+                            tabindex="0"
+                            data-url="@Url.Page("/Projects/Details", new { id = item.Id })"
+                            onclick="window.location.href = this.getAttribute('data-url');"
+                            onkeydown="if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); window.location.href = this.getAttribute('data-url'); }">
+                            <div class="project-status">
+                                @if (item.Status == "Open")
+                                {
+                                    <span class="badge bg-success">公開中</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-danger">停止中</span>
+                                }
+                            </div>
+
+                            <div>
+                                @item.Title
+                            </div>
+
+                            <div class="project-location">
+                                <i class="bi bi-geo-alt"></i>
+                                @(string.IsNullOrWhiteSpace(item.Location) ? "未設定" : item.Location)
+                            </div>
+
+                            <div class="project-price">
+                                <i class="bi bi-cash-stack"></i>
+                                @(string.IsNullOrWhiteSpace(item.PriceRange) ? "未設定" : item.PriceRange)
+                            </div>
+
+                            <div class="project-actions">
+                                <form method="post"
+                                    asp-page-handler="Favorite"
+                                    asp-route-id="@item.Id"
+                                    class="favorite-form"
+                                    onclick="event.stopPropagation();">
+                                    @if (item.IsFavorite)
+                                    {
+                                        <button type="submit" class="btn btn-warning btn-sm">
+                                            ★
+                                        </button>
+                                    }
+                                    else
+                                    {
+                                        <button type="submit" class="btn btn-outline-warning btn-sm">
+                                            ☆
+                                        </button>
+                                    }
+                                </form>
+                            </div>
+                        </div>
+                    }
+                </div>
+                <div class="pagination-area">
+                    <div class="page-info">
+                        @{
+                            var start = Model.TotalCount == 0
+                                ? 0
+                                : (Model.PageNumber - 1) * Model.PageSize + 1;
+
+                            var end = Math.Min(
+                                Model.PageNumber * Model.PageSize,
+                                Model.TotalCount);
+                        }
+
+                        @start ～ @end 件 / 全 @Model.TotalCount 件
+                    </div>
+
+                    <nav>
+                        <ul class="pagination mb-0">
+
+                            <!-- 最初 -->
+                            <li class="page-item @(Model.PageNumber == 1 ? "disabled" : "")">
+                                <a class="page-link"
+                                asp-page="./Index"
+                                asp-route-pageNumber="1"
+                                asp-route-SearchTitle="@Model.SearchTitle"
+                                asp-route-SearchPrefecture="@Model.SearchPrefecture"
+                                asp-route-SearchStatus="@Model.SearchStatus"
+                                asp-route-OnlyFavorite="@Model.OnlyFavorite"
+                                asp-route-SortColumn="@Model.SortColumn"
+                                asp-route-SortOrder="@Model.SortOrder">
+                                    <i class="bi bi-chevron-double-left"></i>
+                                </a>
+                            </li>
+
+                            <!-- 前へ -->
+                            <li class="page-item @(Model.PageNumber == 1 ? "disabled" : "")">
+                                <a class="page-link"
+                                asp-page="./Index"
+                                asp-route-pageNumber="@(Model.PageNumber - 1)"
+                                asp-route-SearchTitle="@Model.SearchTitle"
+                                asp-route-SearchPrefecture="@Model.SearchPrefecture"
+                                asp-route-SearchStatus="@Model.SearchStatus"
+                                asp-route-OnlyFavorite="@Model.OnlyFavorite"
+                                asp-route-SortColumn="@Model.SortColumn"
+                                asp-route-SortOrder="@Model.SortOrder">
+                                    <i class="bi bi-chevron-left"></i>
+                                </a>
+                            </li>
+
+                            <!-- ページ番号 -->
+                            @for (int i = 1; i <= Model.TotalPages; i++)
+                            {
+                                <li class="page-item @(i == Model.PageNumber ? "active" : "")">
+                                    <a class="page-link"
+                                    asp-page="./Index"
+                                    asp-route-pageNumber="@i"
+                                    asp-route-SearchTitle="@Model.SearchTitle"
+                                    asp-route-SearchPrefecture="@Model.SearchPrefecture"
+                                    asp-route-SearchStatus="@Model.SearchStatus"
+                                    asp-route-OnlyFavorite="@Model.OnlyFavorite"
+                                    asp-route-SortColumn="@Model.SortColumn"
+                                    asp-route-SortOrder="@Model.SortOrder">
+                                        @i
+                                    </a>
+                                </li>
+                            }
+
+                            <!-- 次へ -->
+                            <li class="page-item @(Model.PageNumber == Model.TotalPages ? "disabled" : "")">
+                                <a class="page-link"
+                                asp-page="./Index"
+                                asp-route-pageNumber="@(Model.PageNumber + 1)"
+                                asp-route-SearchTitle="@Model.SearchTitle"
+                                asp-route-SearchPrefecture="@Model.SearchPrefecture"
+                                asp-route-SearchStatus="@Model.SearchStatus"
+                                asp-route-OnlyFavorite="@Model.OnlyFavorite"
+                                asp-route-SortColumn="@Model.SortColumn"
+                                asp-route-SortOrder="@Model.SortOrder">
+                                    <i class="bi bi-chevron-right"></i>
+                                </a>
+                            </li>
+
+                            <!-- 最後 -->
+                            <li class="page-item @(Model.PageNumber == Model.TotalPages ? "disabled" : "")">
+                                <a class="page-link"
+                                asp-page="./Index"
+                                asp-route-pageNumber="@Model.TotalPages"
+                                asp-route-SearchTitle="@Model.SearchTitle"
+                                asp-route-SearchPrefecture="@Model.SearchPrefecture"
+                                asp-route-SearchStatus="@Model.SearchStatus"
+                                asp-route-OnlyFavorite="@Model.OnlyFavorite"
+                                asp-route-SortColumn="@Model.SortColumn"
+                                asp-route-SortOrder="@Model.SortOrder">
+                                    <i class="bi bi-chevron-double-right"></i>
+                                </a>
+                            </li>
+
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+</div>

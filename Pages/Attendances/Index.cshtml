@@ -1,0 +1,305 @@
+@page
+@using 社員_求人管理アプリ.Enums
+@using 社員_求人管理アプリ.Extensions
+@model 社員_求人管理アプリ.Pages.Attendances.IndexModel
+
+<div class="attendance-page">
+
+    <section class="attendance-header">
+        <div class="attendance-header-left">
+            <h1>勤怠管理</h1>
+        </div>
+    </section>
+    <div class="attendance-content">
+        <div class="attendance-main">
+            <!-- 右：サイド -->
+            <div class="attendance-side">
+                <div class="attendance-summary">
+                    <div class="attendance-summary-card">
+                        <div class="summary-info">
+                            <span class="summary-title">総勤務時間</span>
+                            <h3>@Model.Summary.TotalWorkingTime</h3>
+                            <small>目標160時間</small>
+                        </div>
+                        <div class="summary-icon blue">
+                            <i class="bi bi-clock-history"></i>
+                        </div>
+                    </div>
+                    <div class="attendance-summary-card">
+                        <div class="summary-info">
+                            <span class="summary-title">残業時間</span>
+                            <h3>@Model.Summary.Overtime</h3>
+                            <small>目標20時間以内</small>
+                        </div>
+                        <div class="summary-icon purple">
+                            <i class="bi bi-stopwatch"></i>
+                        </div>
+                    </div>
+                    <div class="attendance-summary-card">
+                        <div class="summary-info">
+                            <span class="summary-title">有休取得日数</span>
+                            <h3>@Model.Summary.PaidLeaveDays 日</h3>
+                            <small>残り18日</small>
+                        </div>
+                        <div class="summary-icon green">
+                            <i class="bi bi-calendar-event"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="attendance-status-card">
+                    <div class="card-header">
+                        <h5 class="mb-0">今日の打刻</h5>
+                    </div>
+                    <div class="attendance-status-body">
+                        @if (Model.TodayAttendance.NotStarted)
+                        {
+                            <div class="attendance-empty">
+                                <i class="bi bi-clock"></i>
+                                <form method="post">
+                                    <button asp-page-handler="ClockIn" class="btn btn-success">
+                                        出勤
+                                    </button>
+                                </form>
+                            </div>
+                        }
+                        else if (Model.TodayAttendance.IsWorking)
+                        {
+                            <div class="attendance-working">
+                                <div class="attendance-time">
+                                    <small>出勤時刻</small>
+                                    <h3>
+                                        @Model.TodayAttendance.ClockIn!.Value.ToString("HH:mm")
+                                    </h3>
+                                </div>
+                                <form method="post">
+                                    <button asp-page-handler="ClockOut" class="btn btn-danger">
+                                        退勤
+                                    </button>
+                                </form>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="attendance-finished">
+                                <div class="attendance-times">
+                                    <div>
+                                        <small>出勤</small>
+                                        <strong>
+                                            @Model.TodayAttendance.ClockIn!.Value.ToString("HH:mm")
+                                        </strong>
+                                    </div>
+                                    <div>
+                                        <small>退勤</small>
+                                        <strong>
+                                            @Model.TodayAttendance.ClockOut!.Value.ToString("HH:mm")
+                                        </strong>
+                                    </div>
+                                </div>
+                                <div class="finish-message">
+                                    <i class="bi bi-check-circle-fill"></i>
+                                    本日の勤務は終了しました。
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+            <!-- 左：カレンダー -->
+            <div class="attendance-calendar-card">
+                <div class="card-header attendance-calendar-header">
+                    <h5 class="mb-0">勤務カレンダー</h5>
+                    <div class="calendar-controls">
+                        <a asp-page="./Index"
+                        asp-route-year="@(Model.DisplayMonth == 1 ? Model.DisplayYear - 1 : Model.DisplayYear)"
+                        asp-route-month="@(Model.DisplayMonth == 1 ? 12 : Model.DisplayMonth - 1)"
+                        class="btn btn-outline-secondary btn-sm">
+                            <i class="bi bi-chevron-left"></i>
+                        </a>
+                        <div class="current-month">
+                            @Model.DisplayMonthText
+                        </div>
+
+                        <a asp-page="./Index"
+                        asp-route-year="@(Model.DisplayMonth == 12 ? Model.DisplayYear + 1 : Model.DisplayYear)"
+                        asp-route-month="@(Model.DisplayMonth == 12 ? 1 : Model.DisplayMonth + 1)"
+                        class="btn btn-outline-secondary btn-sm">
+                            <i class="bi bi-chevron-right"></i>
+                        </a>
+
+                        <a asp-page="./Index"
+                        asp-route-year="@DateTime.Today.Year"
+                        asp-route-month="@DateTime.Today.Month"
+                        class="btn btn-outline-primary btn-sm">
+                            今日
+                        </a>
+                    </div>
+                </div>
+                <div class="attendance-calendar">
+                    <div class="calendar-week-header">
+                        <div class="sun">日</div>
+                        <div>月</div>
+                        <div>火</div>
+                        <div>水</div>
+                        <div>木</div>
+                        <div>金</div>
+                        <div class="sat">土</div>
+                    </div>
+                    <div class="calendar-grid">
+                        @foreach(var day in Model.CalendarDays)
+                        {
+                            <div class="calendar-day @(day.IsToday ? "today" : "")"
+                                @if(day.IsCurrentMonth)
+                                {
+                                    <text>
+                                    data-date="@day.Date!.Value.ToString("yyyy-MM-dd")"
+                                    onclick="openAttendanceModal(
+                                        '@day.Date!.Value.ToString("yyyy-MM-dd")',
+                                        '@(day.ClockIn?.ToString("HH:mm") ?? "")',
+                                        '@(day.ClockOut?.ToString("HH:mm") ?? "")',
+                                        '@(day.Status ?? AttendanceStatus.Normal)',
+                                        '@day.BreakMinutes'
+                                        )"
+                                    </text>
+                                }>
+                                @if(day.IsCurrentMonth)
+                                {
+                                    <div class="day-header">
+                                        <div class="day-number
+                                            @(day.DayOfWeek == DayOfWeek.Sunday ? "text-danger" : "")
+                                            @(day.DayOfWeek == DayOfWeek.Saturday ? "text-primary" : "")">
+                                            @day.Date!.Value.Day
+                                        </div>
+                                        @if(day.Status != null)
+                                        {
+                                            <span class="attendance-status">
+                                                @day.Status.Value.GetShortName()
+                                            </span>
+                                        }
+                                    </div>
+                                    <div class="attendance-record">
+                                        <div class="clock-in">
+                                            <i class="bi bi-box-arrow-in-right"></i>
+                                            @(day.ClockIn?.ToString("HH:mm") ?? "--:--")
+                                        </div>
+                                        <div class="clock-out">
+                                            <i class="bi bi-box-arrow-left"></i>
+                                            @(day.ClockOut?.ToString("HH:mm") ?? "--:--")
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="attendanceModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    勤怠編集
+                </h5>
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal">
+                </button>
+            </div>
+            <form method="post" asp-page-handler="Edit">
+
+                <div class="modal-body">
+                    <input type="hidden" id="attendanceDate" name="Date">
+
+                    <div class="attendance-form-row">
+                        <label>日付</label>
+                        <input id="displayDate" class="form-control" readonly>
+                    </div>
+                    <div class="attendance-form-row">
+                        <label>出勤時間</label>
+                        <select id="clockInHour" name="ClockInHour" class="form-select">
+                            <option value="">--</option>
+                            @for (int h = 0; h < 24; h++)
+                            {
+                                <option value="@h">@($"{h:D2}")</option>
+                            }
+                        </select>
+                        <span>時</span>
+                        <select id="clockInMinute" name="ClockInMinute" class="form-select">
+                            <option value="">--</option>
+                            @for (int m = 0; m < 60; m++)
+                            {
+                                <option value="@m">@($"{m:D2}")</option>
+                            }
+                        </select>
+                        <span>分</span>
+                    </div>
+                    <div class="attendance-form-row">
+                        <label>退勤時間</label>
+                        <select id="clockOutHour" name="ClockOutHour" class="form-select">
+                            <option value="">--</option>
+                            @for (int h = 0; h < 24; h++)
+                            {
+                                <option value="@h">@($"{h:D2}")</option>
+                            }
+                        </select>
+                        <span>時</span>
+                        <select id="clockOutMinute" name="ClockOutMinute" class="form-select">
+                            <option value="">--</option>
+                            @for (int m = 0; m < 60; m++)
+                            {
+                                <option value="@m">@($"{m:D2}")</option>
+                            }
+                        </select>
+                        <span>分</span>
+                    </div>
+                    <div class="attendance-form-row">
+                        <label>休憩時間</label>
+                        <!-- 時 -->
+                        <select id="breakHour" name="BreakHour" class="form-select">
+                            <option value="">--</option>
+                            @for (int h = 0; h <= 3; h++)
+                            {
+                                <option value="@h">@($"{h:D2}")</option>
+                            }
+                        </select>
+                        <span>時</span>
+                        <!-- 分 -->
+                        <select id="breakMinute" name="BreakMinute" class="form-select">
+                            <option value="">--</option>
+                            @for (int m = 0; m < 60; m ++)
+                            {
+                                <option value="@m">@($"{m:D2}")</option>
+                            }
+                        </select>
+                        <span>分</span>
+                    </div>
+                    <div class="attendance-form-row">
+                        <label>勤怠区分</label>
+                        <select id="status" name="Status" class="form-select">
+                            @foreach(var status in Enum.GetValues<AttendanceStatus>())
+                            {
+                                <option value="@status">
+                                    @status.GetDisplayName()
+                                </option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button"class="btn btn-secondary"
+                            data-bs-dismiss="modal">
+                        キャンセル
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        保存
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="~/js/attendance.js"></script>

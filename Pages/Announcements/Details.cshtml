@@ -1,0 +1,82 @@
+@page "{id:int}"
+@model 社員_求人管理アプリ.Pages.Announcements.DetailsModel
+@using 社員_求人管理アプリ.Extensions
+<link rel="stylesheet" href="~/css/announcement.css" asp-append-version="true" />
+<div class="container mt-3">
+
+    <!-- 上部ナビ -->
+    <div class="announcement-top">
+        <a asp-page="./Index" class="back-link">
+            <i class="bi bi-chevron-left"></i>
+            一覧に戻る
+        </a>
+        <div class="announcement-nav">
+            @if (Model.PreviousAnnouncement != null)
+            {
+                <a asp-page="./Details"
+                   asp-route-id="@Model.PreviousAnnouncement.Id"
+                   class="btn btn-outline-secondary">
+                    <i class="bi bi-chevron-left"></i>
+                    前へ
+                </a>
+            }
+            else
+            {
+                <button class="btn btn-outline-secondary" disabled>
+                    <i class="bi bi-chevron-left"></i>
+                    前へ
+                </button>
+            }
+
+            @if (Model.NextAnnouncement != null)
+            {
+                <a asp-page="./Details"
+                   asp-route-id="@Model.NextAnnouncement.Id"
+                   class="btn btn-outline-secondary">
+                    次へ
+                    <i class="bi bi-chevron-right"></i>
+                </a>
+            }
+            else
+            {
+                <button class="btn btn-outline-secondary" disabled>
+                    次へ
+                    <i class="bi bi-chevron-right"></i>
+                </button>
+            }
+        </div>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-body p-5">
+            <div class="text-muted mb-2">
+                @Model.Announcement.CreatedAt.ToString("yyyy/MM/dd HH:mm")
+            </div>
+            <h2 class="mb-3">
+                @Model.Announcement.Title
+            </h2>
+            <div class="mb-4">
+                <span class="announcement-badge @Model.Announcement.Category.ToString().ToLower()">
+                    @Model.Announcement.Category.GetDisplayName()
+                </span>
+            </div>
+            <hr />
+            <div style="white-space: pre-line; line-height:2;">
+                @Model.Announcement.Content
+            </div>
+
+            @if (!string.IsNullOrEmpty(Model.Announcement.AttachmentPath))
+            {
+                <hr />
+                <h6 class="mb-3">添付ファイル</h6>
+                <a href="@Model.Announcement.AttachmentPath"
+                   target="_blank"
+                   class="text-decoration-none">
+
+                    <i class="bi bi-paperclip"></i>
+                    @Model.Announcement.AttachmentFileName
+                </a>
+            }
+        </div>
+    </div>
+</div>

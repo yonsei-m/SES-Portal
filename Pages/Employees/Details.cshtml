@@ -1,0 +1,225 @@
+@page
+@model 社員_求人管理アプリ.Pages.Employees.DetailsModel
+
+<div class="employee-page employee-detail-page">
+    <section class="employee-header">
+        <div class="employee-header-left">
+            <nav class="breadcrumb-nav">
+                <a asp-page="/Index" class="breadcrumb-link">
+                    <i class="bi bi-house-fill"></i>
+                    <span>ホーム</span>
+                </a>
+                <a asp-page="/Employees/Index" class="breadcrumb-link">
+                    <i class="bi bi-chevron-right mx-2"></i>
+                    <span>社員一覧</span>
+                </a>
+                <i class="bi bi-chevron-right mx-2"></i>
+                <span>社員詳細</span>
+            </nav>
+            <h1>社員詳細</h1>
+        </div>
+    </section>
+
+    @if (Model.Employee == null)
+    {
+        <section class="employee-list-card">
+            <p class="mb-0">データが見つかりません</p>
+        </section>
+    }
+    else
+    {
+        <section class="employee-list-card employee-detail-card">
+
+            <form method="post" enctype="multipart/form-data">
+                <div class="employee-detail-grid">
+                    <div class="detail-photo-card">
+                        <div class="list-title">
+                            <div class="employee-avatar header-avatar">
+                                @if (!string.IsNullOrEmpty(Model.Employee.ImagePath))
+                                {
+                                    <img src="@Model.Employee.ImagePath" alt="社員画像" />
+                                }
+                                else
+                                {
+                                    <i class="bi bi-person-circle"></i>
+                                }
+                            </div>
+                            <div>
+                                <h5 class="mb-0">@Model.Employee.Name</h5>
+                            </div>
+                 
+                                @if(Model.CanEdit)
+                                {
+                                    <div class="mt-3">
+                                        <label class="btn btn-outline-primary">
+                                            <i class="bi bi-camera"></i>
+                                            画像変更
+                                            <input asp-for="ImageFile" id="imageInput" type="file" accept="image/*" hidden />
+                                        </label>
+                                    </div>
+                                }
+                        </div>
+                    </div>
+                    <div class="detail-info-card">
+                        <div class="detail-info-table">       
+                            <div class="detail-info-item">
+                                <div class="detail-label">
+                                    <i class="bi bi-person-vcard"></i>社員番号
+                                </div>
+                                <span class="detail-value">@Model.Employee.EmployeeNumber</span>
+                            </div>
+                            <div class="detail-info-item">
+                                <div class="detail-label">
+                                    <i class="bi bi-diagram-3"></i>部署
+                                </div>
+                                <span class="detail-value">@Model.Employee.Department.Name</span>
+                            </div>
+                            <div class="detail-info-item">
+                                <div class="detail-label">
+                                    <i class="bi bi-info-circle-fill"></i>稼働状態
+                                </div>
+                                <span class="detail-value">
+                                    @switch(Model.Employee.Status)
+                                    {
+                                        case 社員_求人管理アプリ.Enums.EmployeeStatus.Working:
+                                            <span class="status-badge working">稼働中</span>
+                                            break;
+                                        case 社員_求人管理アプリ.Enums.EmployeeStatus.Waiting:
+                                            <span class="status-badge waiting">待機中</span>
+                                            break;
+
+                                        case 社員_求人管理アプリ.Enums.EmployeeStatus.Leave:
+                                            <span class="status-badge leave">
+                                                休職中
+                                            </span>
+                                            break;
+
+                                        case 社員_求人管理アプリ.Enums.EmployeeStatus.Retired:
+                                            <span class="status-badge retired">
+                                                退職済
+                                            </span>
+                                            break;
+                                    }
+                                </span>
+                            </div>    
+                            <div class="detail-info-item">
+                                <div class="detail-label">
+                                    <i class="bi bi-envelope-fill"></i>Email
+                                </div>
+                                <span class="detail-value">@Model.Employee.Email</span>
+                            </div>
+                            <div class="detail-info-item">
+                                <div class="detail-label">
+                                    <i class="bi bi-calendar-event"></i>入社日
+                                </div>
+                                <span class="detail-value">@Model.Employee.HireDate.ToString("yyyy/MM/dd")</span>
+                            </div>
+                            <div class="detail-info-item">
+                                <div class="detail-label">
+                                    <i class="bi bi-briefcase-fill"></i>経験年数
+                                </div>
+                                @if(Model.CanEdit)
+                                {
+                                    <div class="detail-value">
+                                        <input asp-for="Employee.ExperienceYears" class="form-control detail-edit-input" />
+                                    </div>
+                                }
+                                else
+                                {
+                                    <span class="detail-value">
+                                        @(Model.Employee.ExperienceYears.HasValue
+                                        ? $"{Model.Employee.ExperienceYears.Value}年"
+                                        : "未登録")
+                                    </span>
+                                }
+                            </div>
+                        </div>
+                        @if(Model.CanEdit)
+                        {
+                            <button type="submit" class="btn btn-primary mt-3">
+                                <i class="bi bi-check-lg"></i>
+                                保存する
+                            </button>
+                        }
+                    </div>
+                    <div class="detail-introduction-card">
+                        <!-- スキル -->
+                        <div class="detail-profile-table">
+                            <div class="detail-profile-item">
+                                @if(Model.CanEdit)
+                                {
+                                    <div class="detail-profile-label">
+                                        <div class="skill-dropdown">
+                                            <button type="button"
+                                                    class="form-select skill-select"
+                                                    data-bs-toggle="dropdown"
+                                                    data-bs-auto-close="outside">
+                                                スキル
+                                            </button>
+                                            <div class="dropdown-menu skill-menu">
+                                                @foreach(var skill in Model.AllSkills)
+                                                {
+                                                    <label class="dropdown-item skill-item">
+                                                        <input class="form-check-imput" 
+                                                            type="checkbox"
+                                                            name="SelectedSkillIds"
+                                                            value="@skill.Id"
+                                                            @(Model.SelectedSkillIds.Contains(skill.Id) ? "checked" : "") />
+                                                        <span>@skill.Name</span>
+                                                    </label>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="detail-profile-label">
+                                        スキル
+                                    </div>
+                                }
+                                <div class="detail-profile-value">
+                                    @if (Model.Employee.EmployeeSkills.Any())
+                                    {
+                                        @foreach (var skill in Model.Employee.EmployeeSkills)
+                                        {
+                                            <span class="skill-tag">@skill.Skill.Name</span>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <span>未登録</span>
+                                    }
+                                </div>
+                            </div>
+                            <!-- 自己紹介 -->
+                            <div class="detail-profile-item">
+                                <div class="detail-profile-label">
+                                    自己紹介
+                                </div>
+
+                                <div class="detail-profile-value">
+                                    @if(Model.CanEdit)
+                                    {
+                                        <textarea asp-for="Employee.SelfIntroduction"
+                                                class="form-control detail-edit-textarea"
+                                                rows="4">
+                                        </textarea>
+                                    }
+                                    else
+                                    {
+                                        <span class="detail-value detail-profile-text">
+                                            @(string.IsNullOrWhiteSpace(Model.Employee.SelfIntroduction)
+                                            ? "未登録"
+                                            : Model.Employee.SelfIntroduction)
+                                        </span>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </section>
+    }
+</div>

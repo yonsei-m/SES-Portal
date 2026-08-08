@@ -1,0 +1,303 @@
+/* ==========================
+   MyPage
+========================== */
+.mypage-page {
+  min-height: calc(100vh - 20px);
+  padding: 10px;
+  background-image: url("/images/mypage-bg.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.mypage-grid {
+  display: grid;
+  grid-template-columns: 240px 1fr 320px;
+  gap: 12px;
+  align-items: start;
+  padding: 0 24px;
+}
+
+/* ==========================
+   共通カード
+========================== */
+
+.profile-card,
+.favorite-card,
+.skill-card,
+.attendance-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 24px;
+  border: 1px solid #e9ecef;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+.mypage-card-title {
+  margin: 0 0 20px;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+/* ==========================
+   左：プロフィール
+========================== */
+
+.profile-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.profile-image {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 10px;
+  border: 3px solid #f1f3f5;
+}
+
+.profile-name {
+  margin-bottom: 8px;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.profile-edit-btn {
+  width: auto;
+  min-width: 160px;
+}
+
+/* ==========================
+   中央・右カラム
+========================== */
+
+.center-column,
+.right-column {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* ==========================
+   基本情報
+========================== */
+
+.info-content {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.info-item {
+  display: flex;
+  align-items: center;
+}
+.info-item-mail {
+  align-items: center;
+}
+.info-label {
+  width: 100px;
+  color: #6c757d;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.info-value {
+  font-size: 15px;
+  font-weight: 500;
+}
+
+/* ==========================
+   お気に入り
+========================== */
+
+.favorite-card .list-group {
+  border-radius: 10px;
+}
+
+.favorite-card .list-group-item {
+  border-left: none;
+  border-right: none;
+}
+
+.favorite-card .list-group-item:first-child {
+  border-top: none;
+}
+
+.favorite-card .list-group-item:last-child {
+  border-bottom: none;
+}
+.favorite-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 12px;
+}
+
+.favorite-more-text {
+  font-size: 13px;
+  color: #6c757d;
+}
+
+.favorite-footer .card-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* ==========================
+   レスポンシブ
+========================== */
+
+@media (max-width: 1200px) {
+  .mypage-grid {
+    grid-template-columns: 260px 1fr;
+  }
+
+  .right-column {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 768px) {
+  .mypage-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-card,
+  .favorite-card,
+  .skill-card,
+  .attendance-card {
+    padding: 20px;
+  }
+
+  .info-content {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ==========================
+   お気に入り案件
+========================== */
+
+.favorite-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 10px 0;
+
+  border-bottom: 1px solid #ececec;
+
+  text-decoration: none;
+  color: inherit;
+
+  transition: background-color 0.15s ease;
+}
+
+.favorite-item:last-child {
+  border-bottom: none;
+}
+
+.favorite-info {
+  flex: 1;
+}
+
+.favorite-title {
+  font-size: 16px;
+  font-weight: 600;
+
+  color: #212529;
+}
+
+.favorite-date {
+  font-size: 13px;
+  color: #6c757d;
+  line-height: 1.2;
+}
+.favorite-item:hover {
+  background: #f8f9fa;
+}
+
+.favorite-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+/* ==========================
+   スキル
+========================== */
+
+.skill-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.skill-tag {
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: #eef5ff;
+  color: #2563eb;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* ==========================
+   勤務状況
+========================== */
+
+.attendance-label {
+  color: #6c757d;
+  font-weight: 500;
+}
+
+.attendance-value {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.attendance-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid #f1f3f5;
+}
+
+.attendance-row:last-child {
+  border-bottom: none;
+}
+
+.card-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.card-header-row .mypage-card-title {
+  margin: 0;
+}
+
+.card-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 14px;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.card-link i {
+  font-size: 12px;
+}

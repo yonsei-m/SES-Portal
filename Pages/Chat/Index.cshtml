@@ -1,0 +1,332 @@
+@page 
+@using 社員_求人管理アプリ.Helpers
+@model 社員_求人管理アプリ.Pages.Chat.IndexModel
+
+<div class="chat-page">
+    <div class="chat-window">
+        <!-- 左：トーク一覧 -->
+        <aside class="chat-sidebar">
+            <div class="chat-sidebar-header">
+                <h5 class="mb-0">チャット</h5>
+            </div>
+            <div class="chat-search">
+                <input type="text" class="form-control" placeholder="ユーザーを検索">
+            </div>
+            <div class="chat-room-list">
+            @foreach (var room in Model.Rooms)
+            {
+                <a asp-page="/Chat/Index"
+                asp-route-id="@room.PartnerEmployeeId" 
+                data-room-id="@room.RoomId"
+                class="chat-room-item @(Model.Employee?.Id == room.PartnerEmployeeId ? "active" : "")">
+                    <div class="avatar-wrapper">
+                        <img src="@(room.PartnerImagePath ?? "/images/default-user.png")" class="room-avatar" />
+                        @if(room.IsWorking)
+                        {
+                            <span class="online-dot"></span>
+                        }
+                    </div>
+                    <div class="room-body">
+                        <div class="room-top">
+                            <span class="room-name">
+                                @room.PartnerName
+                            </span>
+                            @if(room.LastMessageAt != null)
+                            {
+                                <span class="room-time">
+                                    @ChatDateHelper.Format(room.LastMessageAt)
+                                </span>
+                            }
+                        </div>
+                        <div class="room-bottom">
+                            <span class="room-message">
+                                @room.LastMessage
+                            </span>
+                            @if(room.UnreadCount > 0)
+                            {
+                                <span class="badge bg-primary room-unread">
+                                    @room.UnreadCount
+                                </span>
+                            }
+                        </div>
+                    </div>
+                </a>
+            }
+            </div>
+        </aside>
+
+        <!-- 中央：チャット -->
+        <main class="chat-main">
+           <div class="chat-main-header">
+                @if(Model.Employee == null)
+                {
+                    <div class="chat-empty">
+                        <i class="bi bi-chat-dots"></i>
+                        <h4>
+                            チャット相手を選択してください
+                        </h4>
+                        <p>
+                            左側のトーク一覧から相手を選択すると
+                            会話を開始できます。
+                        </p>
+                    </div>
+                }
+                else
+                {
+                    <div class="chat-user-info">
+                        <div>
+                            <h5>@Model.Employee.Name</h5>
+                            <span class="attendance-status @(Model.IsWorking ? "working" : "finished")">
+                                ● @Model.AttendanceStatusText
+                            </span>
+                        </div>
+                    </div>
+                }
+            </div>
+            @if(Model.Employee != null)
+            {
+                <input type="hidden" id="roomId" value="@Model.Room?.Id" />
+                <input type="hidden" id="employeeId" value="@Model.Employee?.Id" />
+                <input type="hidden" id="currentUserId" value="@Model.CurrentUserId" />
+                <div class="chat-thread">
+                    @for (int i = 0; i < Model.Messages.Count; i++)
+                    {
+                        var message = Model.Messages[i];
+                        var previous =
+                            i > 0 ? Model.Messages[i - 1] : null;
+                        if (previous == null ||
+                            previous.SentAt.ToLocalTime().Date != message.SentAt.ToLocalTime().Date)
+                        {
+                            <div class="chat-date-divider">
+                                @message.SentAt.ToLocalTime().ToString("yyyy年M月d日")
+                            </div>
+                        }
+                        <div class="message-row @(message.SenderId == Model.CurrentUserId ? "mine" : "other")">
+                            <div class="message-bubble">
+                                @if (!string.IsNullOrWhiteSpace(message.Message))
+                                {
+                                    <div class="message-text">@message.Message</div>
+                                }
+
+                                @if (!string.IsNullOrEmpty(message.FilePath))
+                                {
+                                    <div class="chat-file">
+                                        <i class="bi bi-paperclip"></i>
+
+                                        <a href="@message.FilePath" target="_blank">
+                                            @message.FileName
+                                        </a>
+                                    </div>
+                                }
+                            </div>
+                            <div class="message-time">
+                                @if (message.SenderId == Model.CurrentUserId)
+                                {
+                                    <span class="read-status">
+                                        @(message.IsRead ? "既読" : "")
+                                    </span>
+                                }
+                                @ChatDateHelper.FormatTime(message.SentAt)
+                            </div>
+                        </div>
+                    }
+                </div>
+                <form method="post"
+                enctype="multipart/form-data"
+                    asp-page-handler="Send"
+                    asp-route-id="@Model.Employee?.Id"
+                    class="chat-input"> @Html.AntiForgeryToken()
+                    <div class="message-input-wrapper">
+                        <input asp-for="Attachment" id="attachmentInput" hidden />
+                        <button type="button" id="attachButton" class="attach-button">
+                            <i class="bi bi-paperclip"></i>
+                        </button>
+                        <textarea asp-for="Message"
+                                class="form-control message-textarea"
+                                rows="1"
+                                placeholder="メッセージを入力してください">
+                        </textarea>
+
+                        <button type="submit" class="send-button">
+                            <i class="bi bi-send-fill"></i>
+                        </button>
+                    </div>
+
+                    <div id="selectedFile" class="selected-file" style="display:none">
+                        <i class="bi bi-paperclip"></i>
+                        <span id="selectedFileName"></span>
+                    </div>
+                </form>
+            }
+        </main>
+
+        <!-- 右：プロフィール -->
+        <aside class="chat-profile">
+            @if(Model.Employee != null)
+            {
+                <div id="filesPanel" style="display:none;">
+                    <div class="file-section">
+                        <div class="d-flex align-items-center justify-content-between mb-3">
+                            <h6>共有ファイル</h6>
+                            <a href="#" id="backProfileBtn" class="text-decoration-none">
+                                <i class="bi bi-arrow-left"></i>
+                                戻る
+                            </a>
+                        </div>
+
+                        <div id="allSharedFilesList">
+                            @if (Model.SharedFiles.Any())
+                            {
+                                @foreach (var file in Model.SharedFiles)
+                                {
+                                    <partial name="_ChatSharedFile" model="file" />
+                                }
+                            }
+                            else
+                            {
+                                <div class="empty-message">
+                                    <i class="bi bi-folder"></i>
+                                    <p>共有ファイルはありません</p>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div id="profilePanel"> 
+                    <div class="file-section">
+                        <div class="section-title">
+                            共有ファイル
+                        </div>
+                        <div id="profileSharedFilesList">
+                            @if(Model.SharedFiles.Any())
+                            {
+                                @foreach(var file in Model.SharedFiles.Take(3))
+                                {
+                                    <partial name="_ChatSharedFile" model="file" />
+                                }
+                                <div class="text-end">
+                                    <a href="#" id="showAllFilesBtn" class="profile-panel-action">
+                                        すべて見る
+                                    </a>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="empty-message">
+                                    <i class="bi bi-folder"></i>
+                                    <p>共有ファイルはありません</p>
+                                </div>
+                            }                        
+                        </div>       
+                    </div>
+                    <div class="memo-section">
+                        <div class="d-flex align-items-center justify-content-between mb-3">
+                            <div class="section-title">
+                                メモ
+                            </div>
+                            <a href="#" id="createMemoBtn" class="text-decoration-none profile-panel-action">
+                                <i class="bi bi-plus-lg"></i>
+                                新規作成
+                            </a>
+                        </div>
+                        <div id="memoList">
+                            @if(Model.Memos.Any())
+                            {
+                                @foreach(var memo in Model.Memos.Take(3))
+                                {
+                                    <partial name="_ChatSharedMemoCard" model="memo" view-data='new ViewDataDictionary(ViewData)
+                                            {
+                                                ["Source"] = "list"
+                                            }' />
+                                }
+                            }
+                            else
+                            {
+                                <div class="empty-message">
+                                    <i class="bi bi-journal-text"></i>
+                                    <p>
+                                        共有メモはありません
+                                    </p>
+                                </div>
+                            }
+                        </div>
+                        @if(Model.Memos.Count > 3)
+                        {
+                            <div class="text-end">
+                                <a href="#" id="showAllMemosBtn" class="profile-panel-action">
+                                    すべて見る
+                                </a>
+                            </div>
+                        }
+                    </div>                
+                </div>
+                <div id="memoListPanel" style="display:none;">
+                    <div class="memo-section">
+                        <div class="d-flex align-items-center justify-content-between mb-3">
+                            <h6 class="mb-0">メモ一覧</h6>
+                            <a href="#" id="backMemoListBtn" class="text-decoration-none">
+                                <i class="bi bi-arrow-left"></i>戻る
+                            </a>
+                        </div>
+
+                        <div>
+                            @foreach(var memo in Model.Memos)
+                            {
+                                <partial name="_ChatSharedMemoCard" model="memo" view-data='new ViewDataDictionary(ViewData)
+                                        {
+                                            ["Source"] = "list"
+                                        }' />
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div id="memoEditPanel" style="display:none;">
+                    <div class="file-section">
+                        <div class="d-flex align-items-center justify-content-between mb-3">
+                            <h6 class="mb-0">メモ編集</h6>
+                            <a href="#" id="backMemoBtn" class="text-decoration-none">
+                                <i class="bi bi-arrow-left"></i>
+                                戻る
+                            </a>
+                        </div>
+                        <form method="post">
+                            <input type="hidden" name="id" value="@Model.Employee.Id" />
+                            <input type="hidden" id="memoId" asp-for="MemoId" />
+                            <div class="mb-3">
+                                <label class="form-label">
+                                    タイトル
+                                </label>
+                                <input type="text" id="memoTitle" asp-for="MemoTitle" class="form-control" />
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">
+                                    内容
+                                </label>
+                                <textarea id="memoContent" asp-for="MemoContent" class="form-control" rows="8"></textarea>
+                            </div>
+
+                            <div class="d-flex justify-content-end gap-2">
+                                <button type="submit" asp-page-handler="UpdateMemo" class="btn btn-primary">
+                                    保存
+                                </button>
+                                <button type="submit" asp-page-handler="DeleteMemo" class="btn btn-outline-danger" onclick="return confirm('削除しますか？');">
+                                    削除
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>    
+            }
+            else
+            {
+                <div class="profile-empty">
+                    <i class="bi bi-person"></i>
+                    <p>相手を選択してください</p>
+                </div>
+            }
+        </aside>
+    </div>
+</div>
+
+<script src="~/js/chat.js"></script>

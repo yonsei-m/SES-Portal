@@ -1,0 +1,19 @@
+@using 社員_求人管理アプリ.Models
+@model ChatMemo
+
+<div class="chat-memo-card"
+data-source="profile"
+data-id="@Model.Id"
+data-title="@Model.Title"
+data-content="@Model.Content">
+<div class="chat-memo-title">
+    <i class="bi bi-journal-text"></i>
+    @Model.Title
+</div>
+@if (!string.IsNullOrWhiteSpace(Model.Content))
+{
+    <div class="chat-memo-content">
+        @Model.Content
+    </div>
+}
+</div>

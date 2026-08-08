@@ -1,0 +1,38 @@
+@using 社員_求人管理アプリ.ViewModels
+@model SharedFileViewModel
+
+<a href="@Model.FilePath" target="_blank" class="shared-file">
+    <div class="shared-file-icon">
+        @switch(Model.ContentType)
+        {
+            case "application/pdf":
+                <i class="bi bi-file-earmark-pdf"></i>
+                break;
+
+            case "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
+                <i class="bi bi-file-earmark-word"></i>
+                break;
+
+            case "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet":
+                <i class="bi bi-file-earmark-excel"></i>
+                break;
+
+            default:
+                <i class="bi bi-file-earmark"></i>
+                break;
+        }
+    </div>
+
+    <div class="shared-file-body">
+        <div class="shared-file-name">
+            @Model.FileName
+        </div>
+
+        <div class="shared-file-info">
+            @Model.SentAt.ToLocalTime().ToString("yyyy/MM/dd")
+            ・
+            @(Math.Round(Model.FileSize / 1024.0))
+            KB
+        </div>
+    </div>
+</a>

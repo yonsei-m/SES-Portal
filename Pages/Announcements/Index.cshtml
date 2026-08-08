@@ -1,0 +1,89 @@
+@page
+@model 社員_求人管理アプリ.Pages.Announcements.IndexModel
+@using 社員_求人管理アプリ.Enums;
+@using 社員_求人管理アプリ.Extensions
+
+<div class="announcement-page">
+    <div class="announcement-header">
+        <h2>お知らせ一覧</h2>
+    </div>
+
+    <form method="get">
+        <div class="announcement-toolbar">
+            <input asp-for="Keyword" class="form-control" placeholder="キーワードで検索" />
+            <div class="form-check">
+                <input asp-for="UnreadOnly" class="form-check-input" type="checkbox" />
+                <label asp-for="UnreadOnly" class="form-check-label"> 未読のみ </label>
+            </div>
+
+            <select asp-for="Category"
+                    asp-items="Html.GetEnumSelectList<AnnouncementCategory>()"
+                    class="form-select">
+                <option value="">すべてのカテゴリ</option>
+            </select>
+
+            <select asp-for="Sort" class="form-select">
+                <option value="new">
+                    新しい順
+                </option>
+                <option value="old">
+                    古い順
+                </option>
+            </select>
+
+            <button type="submit" class="btn btn-primary">
+                <i class="bi bi-search"></i>
+                検索
+            </button>
+        </div>
+    </form>
+
+    <div class="announcement-card">
+        <div class="announcement-table-header">
+            <div>状態</div>
+            <div>タイトル</div>
+            <div>カテゴリ</div>
+            <div>公開日</div>
+        </div>
+
+        <div class="announcement-table-wrapper">
+            <table class="table announcement-table">
+                <tbody>
+                    @foreach (var item in Model.Announcements)
+                    {
+                        <tr class="announcement-row"
+                            onclick="location.href='@Url.Page("./Details", new { id = item.Id })'">
+                            <td>
+                                @if (Model.ReadAnnouncementIds.Contains(item.Id))
+                                {
+                                    <span class="announcement-status read">
+                                        <span class="announcement-dot"></span>
+                                        既読
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="announcement-status unread">
+                                        <span class="announcement-dot"></span>
+                                        未読
+                                    </span>
+                                }
+                            </td>
+                            <td class="announcement-title">
+                                @item.Title
+                            </td>
+                            <td>
+                                <span class="announcement-badge @item.Category.ToString().ToLower()">
+                                    @item.Category.GetDisplayName()
+                                </span>
+                            </td>
+                            <td>
+                                @item.CreatedAt.ToString("yyyy/MM/dd HH:mm")
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

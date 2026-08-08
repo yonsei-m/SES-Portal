@@ -1,0 +1,486 @@
+/* dashboard.css - Complete Dashboard Styles */
+
+.dashboard-bg {
+  background: url("/images/dashboard-bg.png") center/cover no-repeat;
+  min-height: 100vh;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+}
+
+.hero-section {
+  min-height: 160px;
+  display: flex;
+  align-items: flex-start;
+  padding-top: 20px;
+  padding-left: 20px;
+  flex-shrink: 0;
+}
+
+.hero-content {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+.hero-line {
+  width: 5px;
+  height: 55px;
+  margin-top: 5px;
+  border-radius: 8px;
+  background: #1e4fa8;
+}
+
+.hero-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  color: #17345d;
+  margin: 0 0 8px;
+}
+
+.hero-subtitle {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #254b7d;
+  margin: 0 0 10px;
+}
+
+.hero-description {
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: #555;
+}
+
+.dashboard-panel {
+  margin-top: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 24px;
+  padding: 26px;
+  box-shadow:
+    0 18px 45px rgba(0, 0, 0, 0.12),
+    inset 0 1px 1px rgba(255, 255, 255, 0.8);
+  flex: 1;
+  overflow: hidden;
+}
+
+.panel-title {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  position: relative;
+  padding-left: 20px;
+}
+
+.dashboard-card {
+  background: #fff;
+  border-radius: 18px;
+
+  padding: 16px 20px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 16px;
+
+  height: 180px;
+
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+
+  transition: 0.25s ease;
+
+  position: relative;
+  overflow: hidden;
+}
+
+.dashboard-card-link:hover .dashboard-card {
+  transform: translateY(-6px);
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.14);
+}
+
+.dashboard-card-link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
+.card-icon {
+  width: 43px;
+  height: 43px;
+  flex-shrink: 0;
+  margin: 0;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+}
+
+.card-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.icon-blue {
+  background: #eaf2ff;
+  color: #2f73da;
+}
+.icon-green {
+  background: #e9f9ee;
+  color: #2fa84f;
+}
+.icon-yellow {
+  background: #fff7dd;
+  color: #d99a00;
+}
+
+.card-caption {
+  color: #777;
+  font-size: 0.75rem;
+  margin-bottom: 3px;
+}
+
+.card-number {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #222;
+  line-height: 1.1;
+}
+
+.card-number span {
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.notice-more-link {
+  display: inline-block;
+  font-size: 0.75rem;
+  margin-top: 4px;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+  flex: 0 0 10px;
+}
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex: 0 0 10px;
+}
+.notice-list li.unread .dot {
+  background: #3b82f6;
+}
+
+.notice-list li.read .dot {
+  background: #cbd5e1;
+}
+
+.notice-list li.unread {
+  font-weight: 600;
+}
+
+.notice-list li.read {
+  color: #888;
+}
+
+@media (max-width: 992px) {
+  .dashboard-bg {
+    padding: 20px;
+  }
+  .hero-section {
+    min-height: auto;
+    padding: 20px 0;
+  }
+  .hero-title {
+    font-size: 1.8rem;
+  }
+  .hero-subtitle {
+    font-size: 1.4rem;
+  }
+  .hero-content {
+    gap: 18px;
+  }
+  .hero-line {
+    height: 80px;
+  }
+  .dashboard-panel {
+    padding: 20px;
+  }
+}
+/* ===========================================================
+   Dashboard Enhanced Style
+   dashboard.css の最後へ追加
+=========================================================== */
+
+/* ---------- 背景を少し明るく ---------- */
+
+.dashboard-bg {
+  position: relative;
+  overflow: hidden;
+}
+
+.dashboard-bg::before {
+  content: "";
+
+  position: absolute;
+  inset: 0;
+
+  background: linear-gradient(
+    rgba(255, 255, 255, 0.12),
+    rgba(255, 255, 255, 0.28)
+  );
+
+  z-index: 0;
+}
+
+.hero-section,
+.dashboard-panel {
+  position: relative;
+  z-index: 1;
+}
+
+/* ---------- タイトル ---------- */
+
+.panel-title::before {
+  content: "";
+
+  position: absolute;
+
+  left: 0;
+  top: 3px;
+
+  width: 6px;
+  height: 30px;
+
+  border-radius: 30px;
+
+  background: #2f73da;
+}
+
+/* ---------- Card ---------- */
+
+.dashboard-card::before {
+  content: "";
+
+  position: absolute;
+
+  top: 0;
+  left: 0;
+
+  width: 100%;
+  height: 5px;
+
+  background: linear-gradient(90deg, #4a8df6, #7eb8ff);
+}
+
+/* ---------- 勤怠 ---------- */
+
+.working-status {
+  margin-top: 18px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+.working-time {
+  margin-top: 12px;
+  padding-top: 16px;
+  border-top: 1px solid #ececec;
+  color: #666;
+  font-size: 0.8rem;
+}
+
+/* ---------- Notice ---------- */
+
+.notice-list {
+  flex: 1;
+  overflow: hidden;
+  max-height: none;
+  list-style: none;
+  padding: 0;
+}
+
+.notice-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.notice-list::-webkit-scrollbar-thumb {
+  background: #b9c4d4;
+  border-radius: 20px;
+}
+
+.notice-list li:hover {
+  padding-left: 8px;
+
+  background: #f8fbff;
+}
+
+.notice-panel {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20px;
+  padding: 18px;
+  height: 100%;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  display: flex;
+
+  flex-direction: column;
+}
+
+.notice-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #ececec;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+  font-weight: 700;
+}
+
+.notice-header a {
+  text-decoration: none;
+}
+
+.notice-list li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 0;
+  border-bottom: 1px solid #ececec;
+  font-size: 0.8rem;
+  transition: 0.2s;
+  cursor: default;
+}
+.notice-list li a {
+  color: #333;
+  text-decoration: none;
+  display: block;
+  width: 100%;
+}
+
+.notice-list li a:hover {
+  color: #174fa6;
+  background: transparent;
+  text-decoration: none;
+}
+
+/* ---------- Button ---------- */
+
+.btn {
+  border-radius: 10px;
+
+  font-weight: 600;
+
+  transition: 0.25s;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+}
+
+/* ---------- Animation ---------- */
+
+.dashboard-card,
+.notice-panel {
+  animation: fadeUp 0.6s ease;
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+
+    transform: translateY(25px);
+  }
+
+  to {
+    opacity: 1;
+
+    transform: translateY(0);
+  }
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 1200px) {
+  .hero-title {
+    font-size: 2.2rem;
+  }
+}
+
+@media (max-width: 992px) {
+  .hero-section {
+    padding-top: 30px;
+  }
+
+  .dashboard-panel {
+    margin-top: 0;
+  }
+
+  .panel-title {
+    margin-bottom: 20px;
+  }
+
+  .notice-list {
+    max-height: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero-content {
+    flex-direction: column;
+
+    gap: 20px;
+  }
+
+  .hero-line {
+    width: 70px;
+
+    height: 6px;
+  }
+
+  .hero-title {
+    font-size: 2.3rem;
+  }
+
+  .hero-subtitle {
+    font-size: 1.4rem;
+  }
+
+  .hero-description {
+    font-size: 1rem;
+  }
+
+  .dashboard-card {
+    padding: 22px;
+  }
+
+  .card-number {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .dashboard-bg {
+    padding: 15px;
+  }
+
+  .dashboard-panel {
+    padding: 18px;
+  }
+
+  .hero-title {
+    font-size: 2rem;
+  }
+
+  .hero-subtitle {
+    font-size: 1.2rem;
+  }
+}

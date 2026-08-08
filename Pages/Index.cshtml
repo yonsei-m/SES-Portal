@@ -1,0 +1,150 @@
+﻿@page
+@model 社員_求人管理アプリ.Pages.IndexModel
+
+<div class="dashboard-bg dashboard-fixed">
+    <section class="hero-section">
+        <div class="hero-content">
+            <div class="hero-line"></div>
+            <div>
+                <h1 class="hero-title">
+                    SES EMPLOYEE PORTAL
+                </h1>
+
+                <h2 class="hero-subtitle">
+                    つなぐ技術、つなぐ未来
+                </h2>
+                <p class="hero-description">
+                    一人ひとりの力が、プロジェクトを、社会を支えています。
+                </p>
+            </div>
+        </div>
+    </section>
+    <section class="dashboard-panel">
+        <div class="row g-4">
+            <!-- 左側 -->
+            <div class="col-xl-8">
+                <div class="panel-title">
+                    ダッシュボード
+                </div>
+                <div class="row g-4 mt-1">
+
+                    <!-- 求人数 -->
+                    <div class="col-md-4">
+                        <a asp-page="/Projects/Index" class="dashboard-card-link">
+                            <div class="dashboard-card">
+                                <div class="card-icon icon-green">
+                                    <i class="bi bi-briefcase-fill"></i>
+                                </div>
+                                <div class="card-info">
+                                    <div class="card-caption">
+                                        公開中のプロジェクト
+                                    </div>
+                                    <div class="card-number">
+                                        @Model.Dashboard.OpenProjectCount
+                                        <span>件</span>
+                                    </div>                               
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <!-- お気に入り案件 -->
+                    <div class="col-md-4">
+                        <a asp-page="/Projects/Index" asp-route-OnlyFavorite="true" class="dashboard-card-link">
+                            <div class="dashboard-card">
+                                <div class="card-icon icon-blue">
+                                    <i class="bi bi-star-fill"></i>
+                                </div>
+                                <div class="card-info">
+                                    <div class="card-caption">
+                                        お気に入り案件
+                                    </div>
+                                    <div class="card-number">
+                                        @Model.Dashboard.FavoriteProjectCount
+                                        <span>件</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <!-- 勤務 -->
+                    <div class="col-md-4">
+                         <a asp-page="/Attendances/Index" class="dashboard-card-link">
+                            <div class="dashboard-card">
+                                <div class="card-icon icon-yellow">
+                                    <i class="bi bi-clock-history"></i>
+                                </div>
+                                <div class="card-info">
+                                    <div class="card-caption">
+                                        打刻ボタン
+                                    </div>
+                                    @if (Model.TodayAttendance == null)
+                                    {
+                                        <form method="post" asp-page-handler="ClockIn">
+                                            <button class="btn btn-success mt-3">
+                                                勤務開始
+                                            </button>
+                                        </form>
+                                    }
+                                    else if (Model.TodayAttendance.ClockOut == null)
+                                    {
+                                        <form method="post" asp-page-handler="ClockOut">
+                                            <button class="btn btn-danger mt-3">
+                                                勤務終了
+                                            </button>
+                                        </form>
+                                    }
+                                    else
+                                    {
+                                        <div class="working-status text-success">
+                                            勤務終了
+                                        </div>
+                                    }
+                                    <div class="working-time">
+                                        勤務時間
+                                        @(Model.WorkingHours?.ToString(@"hh\:mm") ?? "--")
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 右側 -->
+            <div class="col-lg-4">
+                <div class="notice-panel">
+                    <div class="notice-header">
+                        <span>
+                            お知らせ
+                        </span>
+                        <a asp-page="/Announcements/Index"class="notice-more-link">
+                            一覧へ →
+                        </a>
+                    </div>
+                   <ul class="notice-list">
+                    @if (Model.Dashboard.LatestAnnouncements.Any())
+                    {
+                        foreach (var notice in Model.Dashboard.LatestAnnouncements)
+                        {
+                            <li class="@(notice.IsRead ? "read" : "unread")">
+                                <span class="dot"></span>
+                                <a asp-page="/Announcements/Details" asp-route-id="@notice.Id">
+                                    @notice.CreatedAt.ToString("yyyy/MM/dd")                               
+                                    @notice.Title
+                                </a>
+                            </li>
+                        }
+                    }
+                    else
+                    {
+                        <li>
+                            <span class="dot"></span>
+                            お知らせはありません
+                        </li>
+                    }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
