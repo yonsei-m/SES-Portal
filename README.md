@@ -51,9 +51,9 @@ SES企業における社員・プロジェクト管理業務を想定したWeb�
 
 ---
 
-## Employee Management
+## Employees
 
-![Employee Management](docs/images/employees.png)
+![Employees](docs/images/employees.png)
 社員情報を管理します。
 
 - 社員一覧
@@ -68,9 +68,9 @@ SES企業における社員・プロジェクト管理業務を想定したWeb�
 
 ---
 
-## Project Management
+## Projects
 
-![Project Management](docs/images/projects.png)
+![Projects](docs/images/projects.png)
 SESプロジェクトを管理します。
 
 - プロジェクト一覧
@@ -83,7 +83,7 @@ SESプロジェクトを管理します。
 
 ## Attendance Management
 
-![Attendance](docs/images/attendance.png)
+![Attendance Management](docs/images/attendance.png)
 社員の勤怠を管理します。
 
 - 出勤
@@ -371,9 +371,9 @@ Identity / Authentication
  ↓
 Role / Authorization
  ↓
-Employee Management
+Employees
  ↓
-Project Management
+Projects
  ↓
 Dashboard
  ↓
