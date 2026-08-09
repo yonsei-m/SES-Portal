@@ -343,6 +343,15 @@ ChatMemo
 
 ---
 
+## Design Documents
+
+データベース設計資料を以下に掲載しています。
+
+- [ER図](./docs/design/ER図.png)
+- [テーブル定義書](./docs/design/テーブル定義書.xlsx)
+
+---
+
 # Security
 
 ASP.NET Core Identityを利用して認証・認可を実装しています。
