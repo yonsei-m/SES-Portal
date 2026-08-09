@@ -34,7 +34,7 @@ public class ChatService
             SenderId = senderId,
             SenderName = senderName,
             Message = message,
-            SentAt = DateTime.UtcNow,
+            SentAt = DateTime.Now,
             IsRead = false,
 
             FileName = fileName,
@@ -73,7 +73,7 @@ public class ChatService
         {
             User1Id = currentUserId,
             User2Id = targetUserId,
-            CreatedAt = DateTime.UtcNow
+            CreatedAt = DateTime.Now
         };
 
         _context.ChatRooms.Add(room);
@@ -187,8 +187,8 @@ public class ChatService
                 ? null
                 : content,
             CreatedBy = userId,
-            CreatedAt = DateTime.UtcNow,
-            UpdatedAt = DateTime.UtcNow
+            CreatedAt = DateTime.Now,
+            UpdatedAt = DateTime.Now
         };
 
         _context.ChatMemos.Add(memo);
@@ -207,7 +207,7 @@ public class ChatService
 
         memo.Title = title;
         memo.Content = content;
-        memo.UpdatedAt = DateTime.UtcNow;
+        memo.UpdatedAt = DateTime.Now;
 
         await _context.SaveChangesAsync();
     }
