@@ -95,10 +95,10 @@
                         var previous =
                             i > 0 ? Model.Messages[i - 1] : null;
                         if (previous == null ||
-                            previous.SentAt.ToLocalTime().Date != message.SentAt.ToLocalTime().Date)
+                            previous.SentAt.Date != message.SentAt.Date)
                         {
                             <div class="chat-date-divider">
-                                @message.SentAt.ToLocalTime().ToString("yyyy年M月d日")
+                                @message.SentAt.ToString("yyyy年M月d日")
                             </div>
                         }
                         <div class="message-row @(message.SenderId == Model.CurrentUserId ? "mine" : "other")">

@@ -29,7 +29,7 @@
         </div>
 
         <div class="shared-file-info">
-            @Model.SentAt.ToLocalTime().ToString("yyyy/MM/dd")
+            @Model.SentAt.ToString("yyyy/MM/dd")
             ・
             @(Math.Round(Model.FileSize / 1024.0))
             KB

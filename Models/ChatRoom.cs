@@ -17,5 +17,5 @@ public class ChatRoom
     // 共有メモ一覧
     public List<ChatMemo> Memos { get; set; } = new();
     // 作成日時
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public DateTime CreatedAt { get; set; } = DateTime.Now;
 }
