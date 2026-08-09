@@ -220,21 +220,24 @@ public class IndexModel : PageModel
                 unreadCount);
 
 
-        // 受信者へ通知
-        await _hubContext.Clients
-            .Group($"user_{receiverUserId}")
-            .SendAsync(
-                "ReceiveMessage",
-                Room.Id,
-                chatMessage.SenderId,
-                chatMessage.SenderName,
-                chatMessage.Message,
-                chatMessage.FileName,
-                chatMessage.FilePath,
-                chatMessage.FileSize,
-                chatMessage.ContentType,
-                chatMessage.SentAt,
-                unreadCount);
+        // 自分自身へのチャットでは、同じグループに二重送信しない
+        if (receiverUserId != currentUser.Id)
+        {
+            await _hubContext.Clients
+                .Group($"user_{receiverUserId}")
+                .SendAsync(
+                    "ReceiveMessage",
+                    Room.Id,
+                    chatMessage.SenderId,
+                    chatMessage.SenderName,
+                    chatMessage.Message,
+                    chatMessage.FileName,
+                    chatMessage.FilePath,
+                    chatMessage.FileSize,
+                    chatMessage.ContentType,
+                    chatMessage.SentAt,
+                    unreadCount);
+        }
 
         
         Messages = await _chatService.GetMessagesAsync(Room.Id);
