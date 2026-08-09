@@ -41,6 +41,7 @@ SES企業における社員・プロジェクト管理業務を想定したWeb�
 
 ## Dashboard
 
+![Dashboard](docs/images/dashboard.png)
 ログイン後のトップ画面です。
 
 - プロジェクト数表示
@@ -52,6 +53,7 @@ SES企業における社員・プロジェクト管理業務を想定したWeb�
 
 ## Employee Management
 
+![Employee Management](docs/images/employees.png)
 社員情報を管理します。
 
 - 社員一覧
@@ -68,6 +70,7 @@ SES企業における社員・プロジェクト管理業務を想定したWeb�
 
 ## Project Management
 
+![Project Management](docs/images/projects.png)
 SESプロジェクトを管理します。
 
 - プロジェクト一覧
@@ -80,6 +83,7 @@ SESプロジェクトを管理します。
 
 ## Attendance Management
 
+![Attendance](docs/images/attendance.png)
 社員の勤怠を管理します。
 
 - 出勤
@@ -97,6 +101,7 @@ SESプロジェクトを管理します。
 
 ## Chat
 
+![Chat](docs/images/chat.png)
 SignalRを利用したリアルタイムチャット機能です。
 
 - チャットルーム
@@ -115,6 +120,7 @@ SignalRを利用したリアルタイムチャット機能です。
 
 ## Announcements
 
+![Announcements](docs/images/announcements.png)
 社内向けのお知らせを管理します。
 
 - お知らせ一覧
