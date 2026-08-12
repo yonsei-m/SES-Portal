@@ -107,6 +107,11 @@ document.addEventListener("DOMContentLoaded", function () {
         const sharedFiles = document.getElementById("profileSharedFilesList");
 
         if (sharedFiles) {
+          const emptyMessage = sharedFiles.querySelector(".empty-message");
+
+          if (emptyMessage) {
+            emptyMessage.remove();
+          }
           const fileHtml = `
                     <a href="${filePath}" target="_blank" class="shared-file">
                         <div class="shared-file-icon">
