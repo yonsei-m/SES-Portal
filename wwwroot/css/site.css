@@ -10,101 +10,13 @@ body {
   background: #f5f7fa;
 }
 
-/* 情報カード */
-
-.info-card {
-  background: white;
-  border-radius: 18px;
-  padding: 30px;
-  text-align: center;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-  transition: 0.2s;
-}
-
-.info-card:hover {
-  transform: translateY(-5px);
-}
-
-/* お知らせ */
-
-.notice-card {
-  background: rgba(255, 255, 255, 0.95);
-
-  border-radius: 18px;
-
-  padding: 25px;
-
-  height: 100%;
-
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-}
-
-/* アイコン */
-
-.icon-circle {
-  width: 60px;
-  height: 60px;
-
-  border-radius: 50%;
-
-  display: flex;
-
-  align-items: center;
-
-  justify-content: center;
-
-  margin: auto;
-
-  font-size: 28px;
-}
-
-.blue {
-  background: #e6f0ff;
-  color: #2c6ed5;
-}
-
-.green {
-  background: #e8f8ec;
-  color: #37a94b;
-}
-
-.yellow {
-  background: #fff7dd;
-  color: #d89d0b;
-}
-
-.dashboard-link {
-  display: inline-block;
-
-  margin-top: 20px;
-
-  font-weight: bold;
-
-  text-decoration: none;
-}
-
-.status {
-  margin-top: 10px;
-
-  font-size: 30px;
-
-  font-weight: bold;
-}
-
-.hero-text {
-  font-size: 1.3rem;
-
-  color: #444;
-
-  font-weight: 500;
-}
-
 .app-layout {
   display: flex;
   height: 100vh;
   min-height: 0;
 }
 
+/* ---------- サイドバー ---------- */
 .sidebar {
   width: 180px;
   flex-shrink: 0;
